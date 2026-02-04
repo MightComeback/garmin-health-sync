@@ -610,6 +610,203 @@ const server = http.createServer(async (req, res) => {
     return json(res, 200, { ok: true, message: 'Sync triggered' });
   }
 
+  if (req.method === 'GET' && url.pathname === '/dashboard') {
+    const stats = db.prepare(`
+      SELECT 
+        (SELECT COUNT(*) FROM activities) as totalActivities,
+        (SELECT COUNT(*) FROM daily_metrics) as totalDays,
+        (SELECT COUNT(*) FROM activities WHERE startTime > datetime('now', '-7 days')) as recentActivities,
+        (SELECT MAX(day) FROM daily_metrics) as latestDay
+    `).get() as { totalActivities: number; totalDays: number; recentActivities: number; latestDay: string };
+    
+    const recentSyncs = db.prepare('SELECT * FROM sync_log ORDER BY id DESC LIMIT 5').all() as Array<{
+      id: number; startedAt: string; endedAt: string | null; status: string; details: string | null;
+    }>;
+    
+    const last7Days = db.prepare(`
+      SELECT day, steps, restingHeartRate, sleepSeconds, sleepScore, bodyBattery
+      FROM daily_metrics 
+      WHERE day >= date('now', '-7 days')
+      ORDER BY day ASC
+    `).all() as Array<{
+      day: string; steps: number; restingHeartRate: number | null; sleepSeconds: number | null;
+      sleepScore: number | null; bodyBattery: number | null;
+    }>;
+    
+    const recentActivities = db.prepare(`
+      SELECT startTime, type, name, distanceMeters, durationSeconds, calories
+      FROM activities 
+      ORDER BY startTime DESC LIMIT 5
+    `).all() as Array<{
+      startTime: string; type: string; name: string; distanceMeters: number;
+      durationSeconds: number; calories: number;
+    }>;
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garmin Health Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f7; color: #1d1d1f; line-height: 1.5; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    header { margin-bottom: 24px; }
+    h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+    .subtitle { color: #666; font-size: 15px; margin-top: 4px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .card h3 { font-size: 13px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .card .value { font-size: 32px; font-weight: 700; color: #007AFF; }
+    .card .label { font-size: 13px; color: #999; margin-top: 4px; }
+    .section { background: white; border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .section h2 { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #f0f0f0; }
+    th { font-weight: 600; color: #666; font-size: 12px; text-transform: uppercase; }
+    td { color: #333; }
+    .status-success { color: #34C759; font-weight: 600; }
+    .status-error { color: #FF3B30; font-weight: 600; }
+    .status-running { color: #FF9500; font-weight: 600; }
+    .chart-bar { display: flex; align-items: flex-end; height: 120px; gap: 6px; margin-top: 16px; }
+    .bar { flex: 1; background: #007AFF; border-radius: 4px 4px 0 0; min-height: 4px; position: relative; }
+    .bar:hover { opacity: 0.8; }
+    .bar-label { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #666; white-space: nowrap; }
+    .bar-value { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 600; color: #007AFF; }
+    .btn { background: #007AFF; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+    .btn:hover { background: #0056b3; }
+    .btn-secondary { background: #E5E5EA; color: #333; }
+    .btn-secondary:hover { background: #D1D1D6; }
+    .actions { margin-bottom: 24px; }
+    .empty { color: #999; font-style: italic; padding: 20px 0; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align: center; margin-top: 16px; }
+    .metric { padding: 16px; background: #f5f5f7; border-radius: 12px; }
+    .metric-value { font-size: 24px; font-weight: 700; color: #333; }
+    .metric-label { font-size: 12px; color: #666; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Garmin Health Dashboard</h1>
+      <p class="subtitle">Real-time sync status and health metrics</p>
+    </header>
+
+    <div class="actions">
+      <a href="/dashboard" class="btn">Refresh</a>
+      <a href="/export/activities?format=csv" class="btn btn-secondary" style="margin-left:8px">Export Activities (CSV)</a>
+      <a href="/export/daily?format=csv" class="btn btn-secondary" style="margin-left:8px">Export Daily (CSV)</a>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Total Activities</h3>
+        <div class="value">${stats.totalActivities}</div>
+        <div class="label">${stats.recentActivities} in last 7 days</div>
+      </div>
+      <div class="card">
+        <h3>Days Synced</h3>
+        <div class="value">${stats.totalDays}</div>
+        <div class="label">Latest: ${stats.latestDay || 'N/A'}</div>
+      </div>
+      <div class="card">
+        <h3>Auto Sync</h3>
+        <div class="value">${AUTO_SYNC_INTERVAL > 0 ? 'ON' : 'OFF'}</div>
+        <div class="label">${AUTO_SYNC_INTERVAL > 0 ? `Every ${AUTO_SYNC_INTERVAL / (60 * 60 * 1000)}h` : 'Manual only'}</div>
+      </div>
+      <div class="card">
+        <h3>Garmin</h3>
+        <div class="value">${GARMIN_USERNAME ? '✓' : '✗'}</div>
+        <div class="label">${GARMIN_USERNAME ? 'Configured' : 'Not configured'}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Steps — Last 7 Days</h2>
+      ${last7Days.length > 0 ? `
+      <div class="chart-bar">
+        ${last7Days.map(d => {
+          const maxSteps = Math.max(...last7Days.map(x => x.steps || 0), 10000);
+          const height = maxSteps > 0 ? Math.round(((d.steps || 0) / maxSteps) * 100) : 0;
+          return `<div class="bar" style="height:${height}%" title="${d.day}: ${d.steps?.toLocaleString()} steps">
+            <span class="bar-value">${d.steps ? (d.steps / 1000).toFixed(1) + 'k' : '0'}</span>
+            <span class="bar-label">${d.day.slice(5)}</span>
+          </div>`;
+        }).join('')}
+      </div>` : '<p class="empty">No data available</p>'}
+    </div>
+
+    <div class="section">
+      <h2>Recent Sync History</h2>
+      ${recentSyncs.length > 0 ? `
+      <table>
+        <thead>
+          <tr><th>Time</th><th>Status</th><th>Details</th></tr>
+        </thead>
+        <tbody>
+          ${recentSyncs.map(s => {
+            const statusClass = s.status === 'success' ? 'status-success' : s.status === 'error' ? 'status-error' : 'status-running';
+            return `<tr>
+              <td>${new Date(s.startedAt).toLocaleString()}</td>
+              <td class="${statusClass}">${s.status}</td>
+              <td>${s.details || '-'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>` : '<p class="empty">No sync history yet</p>'}
+    </div>
+
+    <div class="section">
+      <h2>Recent Activities</h2>
+      ${recentActivities.length > 0 ? `
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Type</th><th>Name</th><th>Distance</th><th>Duration</th></tr>
+        </thead>
+        <tbody>
+          ${recentActivities.map(a => {
+            const dist = a.distanceMeters >= 1000 ? (a.distanceMeters / 1000).toFixed(2) + ' km' : a.distanceMeters + ' m';
+            const dur = Math.floor(a.durationSeconds / 60) + 'm';
+            return `<tr>
+              <td>${new Date(a.startTime).toLocaleDateString()}</td>
+              <td>${a.type}</td>
+              <td>${a.name}</td>
+              <td>${dist}</td>
+              <td>${dur}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>` : '<p class="empty">No activities yet</p>'}
+    </div>
+
+    <div class="section">
+      <h2>API Endpoints</h2>
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Path</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>GET</td><td>/health</td><td>Service health status</td></tr>
+          <tr><td>GET</td><td>/activities</td><td>List all activities</td></tr>
+          <tr><td>GET</td><td>/activities/{id}</td><td>Activity details</td></tr>
+          <tr><td>GET</td><td>/daily</td><td>Daily metrics history</td></tr>
+          <tr><td>POST</td><td>/sync</td><td>Trigger Garmin sync</td></tr>
+          <tr><td>GET</td><td>/sync/status</td><td>Sync history log</td></tr>
+          <tr><td>GET</td><td>/export/activities</td><td>Export activities (JSON/CSV)</td></tr>
+          <tr><td>GET</td><td>/export/daily</td><td>Export daily metrics (JSON/CSV)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>`;
+    
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+    res.end(html);
+    return;
+  }
+
   return json(res, 404, { error: 'not_found' });
 });
 
