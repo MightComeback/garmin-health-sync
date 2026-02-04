@@ -32,7 +32,20 @@ bun run cli daily
 
 ## Environment Variables
 
-- `GARMIN_USERNAME` - Your Garmin Connect email
-- `GARMIN_PASSWORD` - Your Garmin Connect password
-- `GARMIN_DB_PATH` - SQLite database path (default: ./garmin.sqlite)
-- `GARMIN_SYNC_PORT` - API port (default: 17890)
+Copy `.env.example` to `.env` and fill in your credentials:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `GARMIN_USERNAME` | Your Garmin Connect email | *required* |
+| `GARMIN_PASSWORD` | Your Garmin Connect password | *required* |
+| `GARMIN_DB_PATH` | SQLite database path | `./garmin.sqlite` |
+| `GARMIN_SYNC_PORT` | API server port | `17890` |
+| `GARMIN_SYNC_URL` | Sync service URL (for CLI) | `http://127.0.0.1:17890` |
+
+## Auto-start on macOS
+
+See [`launchd/README.md`](launchd/README.md) for LaunchAgent setup to auto-start the sync service on login.
