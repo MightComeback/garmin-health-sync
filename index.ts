@@ -33,6 +33,14 @@ db.exec(`
     restingHeartRate INTEGER,
     bodyBattery INTEGER,
     sleepSeconds INTEGER,
+    sleepScore INTEGER,
+    deepSleepSeconds INTEGER,
+    lightSleepSeconds INTEGER,
+    remSleepSeconds INTEGER,
+    awakeSleepSeconds INTEGER,
+    avgSpO2 REAL,
+    avgRespiration REAL,
+    avgStressLevel INTEGER,
     hrvStatus TEXT,
     rawJson TEXT
   );
@@ -63,6 +71,34 @@ type DailySummary = {
   bodyBattery?: { lastDayValue?: number };
   sleepTimeInSeconds?: number;
   hrvStatus?: string;
+};
+
+type SleepData = {
+  dailySleepDTO?: {
+    sleepTimeSeconds?: number;
+    deepSleepSeconds?: number;
+    lightSleepSeconds?: number;
+    remSleepSeconds?: number;
+    awakeSleepSeconds?: number;
+    averageSpO2Value?: number;
+    averageRespirationValue?: number;
+    sleepScore?: { value?: number };
+  };
+};
+
+type BodyBatteryData = {
+  bodyBatteryValuesArray?: Array<{
+    date: string;
+    values: Array<{ value: number }>;
+  }>;
+};
+
+type StressData = {
+  stressValuesArray?: Array<{
+    date: string;
+    values: Array<{ value: number }>;
+  }>;
+  avgStressLevel?: number;
 };
 
 class GarminConnectClient {
@@ -197,6 +233,33 @@ class GarminConnectClient {
       return null;
     }
   }
+
+  async getSleepData(date: string): Promise<SleepData | null> {
+    try {
+      const data = await this.request(`/wellness-service/wellness/dailySleep/${date}`);
+      return data as SleepData;
+    } catch {
+      return null;
+    }
+  }
+
+  async getBodyBatteryData(date: string): Promise<BodyBatteryData | null> {
+    try {
+      const data = await this.request(`/wellness-service/wellness/dailyBodyBattery/${date}`);
+      return data as BodyBatteryData;
+    } catch {
+      return null;
+    }
+  }
+
+  async getStressData(date: string): Promise<StressData | null> {
+    try {
+      const data = await this.request(`/wellness-service/wellness/dailyStress/${date}`);
+      return data as StressData;
+    } catch {
+      return null;
+    }
+  }
 }
 
 const garmin = new GarminConnectClient();
@@ -242,8 +305,8 @@ async function syncGarminData(): Promise<{ activities: number; days: number }> {
   const today = new Date();
   const insertDaily = db.prepare(`
     INSERT OR REPLACE INTO daily_metrics 
-    (day, steps, restingHeartRate, bodyBattery, sleepSeconds, hrvStatus, rawJson)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    (day, steps, restingHeartRate, bodyBattery, sleepSeconds, sleepScore, deepSleepSeconds, lightSleepSeconds, remSleepSeconds, awakeSleepSeconds, avgSpO2, avgRespiration, avgStressLevel, hrvStatus, rawJson)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
   for (let i = 0; i < 30; i++) {
@@ -253,19 +316,31 @@ async function syncGarminData(): Promise<{ activities: number; days: number }> {
 
     const summary = await garmin.getDailySummary(dateStr);
     if (summary) {
-      const hrv = await garmin.getHrvData(dateStr);
-      
-      const dayValue: string = summary.calendarDate! || dateStr;
-      const stepsValue: number = summary.steps! || 0;
+      const [hrv, sleep, bodyBattery, stress] = await Promise.all([
+        garmin.getHrvData(dateStr),
+        garmin.getSleepData(dateStr),
+        garmin.getBodyBatteryData(dateStr),
+        garmin.getStressData(dateStr),
+      ]);
+
+      const dto = sleep?.dailySleepDTO;
       
       insertDaily.run(
-        dayValue,
-        stepsValue,
+        summary.calendarDate || dateStr,
+        summary.steps ?? 0,
         summary.restingHeartRate ?? null,
         summary.bodyBattery?.lastDayValue ?? null,
         summary.sleepTimeInSeconds ?? null,
+        dto?.sleepScore?.value ?? null,
+        dto?.deepSleepSeconds ?? null,
+        dto?.lightSleepSeconds ?? null,
+        dto?.remSleepSeconds ?? null,
+        dto?.awakeSleepSeconds ?? null,
+        dto?.averageSpO2Value ?? null,
+        dto?.averageRespirationValue ?? null,
+        stress?.avgStressLevel ?? null,
         hrv?.status ?? null,
-        JSON.stringify({ summary, hrv })
+        JSON.stringify({ summary, hrv, sleep, bodyBattery, stress })
       );
       daysSynced++;
     }
@@ -344,7 +419,12 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === 'GET' && url.pathname === '/daily') {
-    const rows = db.prepare('SELECT day, steps, restingHeartRate, bodyBattery, sleepSeconds, hrvStatus FROM daily_metrics ORDER BY day DESC LIMIT 60').all();
+    const rows = db.prepare(`
+      SELECT day, steps, restingHeartRate, bodyBattery, sleepSeconds, sleepScore,
+             deepSleepSeconds, lightSleepSeconds, remSleepSeconds, awakeSleepSeconds,
+             avgSpO2, avgRespiration, avgStressLevel, hrvStatus
+      FROM daily_metrics ORDER BY day DESC LIMIT 60
+    `).all();
     return json(res, 200, { items: rows });
   }
 
