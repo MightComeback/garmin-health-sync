@@ -295,6 +295,31 @@ const server = http.createServer(async (req, res) => {
     return json(res, 200, { items: rows });
   }
 
+  if (req.method === 'GET' && url.pathname.startsWith('/activities/')) {
+    const activityId = url.pathname.split('/')[2];
+    const row = db.prepare('SELECT * FROM activities WHERE id = ?').get(activityId) as { id: string; rawJson: string; [key: string]: unknown } | undefined;
+    if (!row) {
+      return json(res, 404, { error: 'activity_not_found' });
+    }
+    let fullData: unknown = null;
+    try {
+      fullData = JSON.parse(row.rawJson);
+    } catch {
+      fullData = null;
+    }
+    return json(res, 200, { 
+      id: row.id,
+      provider: row.provider,
+      startTime: row.startTime,
+      type: row.type,
+      name: row.name,
+      distanceMeters: row.distanceMeters,
+      durationSeconds: row.durationSeconds,
+      calories: row.calories,
+      raw: fullData
+    });
+  }
+
   if (req.method === 'GET' && url.pathname === '/daily') {
     const rows = db.prepare('SELECT day, steps, restingHeartRate, bodyBattery, sleepSeconds, hrvStatus FROM daily_metrics ORDER BY day DESC LIMIT 60').all();
     return json(res, 200, { items: rows });
