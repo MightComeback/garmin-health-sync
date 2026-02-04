@@ -1,10 +1,14 @@
 import Database from 'better-sqlite3';
 import http from 'node:http';
+import { SyncScheduler } from './scheduler';
 
 const DB_PATH = process.env.GARMIN_DB_PATH || './garmin.sqlite';
 const PORT = Number(process.env.GARMIN_SYNC_PORT || 17890);
 const GARMIN_USERNAME = process.env.GARMIN_USERNAME || '';
 const GARMIN_PASSWORD = process.env.GARMIN_PASSWORD || '';
+const AUTO_SYNC_INTERVAL = process.env.GARMIN_AUTO_SYNC_INTERVAL 
+  ? parseInt(process.env.GARMIN_AUTO_SYNC_INTERVAL, 10) * 60 * 60 * 1000 // Convert hours to ms
+  : 0; // 0 = disabled
 
 const db = new Database(DB_PATH);
 
@@ -391,6 +395,19 @@ async function syncGarminData(): Promise<{ activities: number; days: number }> {
   return { activities: activitiesSynced, days: daysSynced };
 }
 
+// Initialize background sync scheduler
+const scheduler = AUTO_SYNC_INTERVAL > 0
+  ? new SyncScheduler({
+      intervalMs: AUTO_SYNC_INTERVAL,
+      onSync: async () => { await syncGarminData(); },
+      onError: (err) => console.error('Auto-sync error:', err.message),
+    })
+  : null;
+
+if (scheduler) {
+  scheduler.start();
+}
+
 // Request context for logging
 const requestContexts = new WeakMap<http.ServerResponse, { req: http.IncomingMessage; startTime: number }>();
 
@@ -517,6 +534,25 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && url.pathname === '/sync/status') {
     const recent = db.prepare('SELECT * FROM sync_log ORDER BY id DESC LIMIT 10').all();
     return json(res, 200, { recent });
+  }
+
+  if (req.method === 'GET' && url.pathname === '/scheduler') {
+    const status = scheduler?.getStatus() ?? { enabled: false, intervalMs: 0, lastSyncAt: null, nextSyncAt: null, isSyncing: false };
+    return json(res, 200, { 
+      autoSync: status,
+      env: {
+        configured: AUTO_SYNC_INTERVAL > 0,
+        intervalHours: AUTO_SYNC_INTERVAL > 0 ? AUTO_SYNC_INTERVAL / (60 * 60 * 1000) : null,
+      }
+    });
+  }
+
+  if (req.method === 'POST' && url.pathname === '/scheduler/trigger') {
+    if (!scheduler) {
+      return json(res, 503, { error: 'scheduler_not_configured', message: 'Set GARMIN_AUTO_SYNC_INTERVAL to enable' });
+    }
+    scheduler.triggerNow();
+    return json(res, 200, { ok: true, message: 'Sync triggered' });
   }
 
   return json(res, 404, { error: 'not_found' });
