@@ -5,7 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "bun --watch index.ts",
-    "start": "bun index.ts"
+    "start": "bun index.ts",
+    "cli": "bun cli.ts",
+    "sync": "bun cli.ts sync",
+    "status": "bun cli.ts status"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",

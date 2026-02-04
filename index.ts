@@ -274,12 +274,29 @@ async function syncGarminData(): Promise<{ activities: number; days: number }> {
   return { activities: activitiesSynced, days: daysSynced };
 }
 
+// Request context for logging
+const requestContexts = new WeakMap<http.ServerResponse, { req: http.IncomingMessage; startTime: number }>();
+
 function json(res: http.ServerResponse, status: number, body: unknown) {
   res.writeHead(status, { 'content-type': 'application/json; charset=utf-8' });
   res.end(JSON.stringify(body, null, 2));
+  
+  // Log after response is sent
+  const ctx = requestContexts.get(res);
+  if (ctx) {
+    const duration = Date.now() - ctx.startTime;
+    const timestamp = new Date().toISOString();
+    const method = ctx.req.method?.padEnd(6) || 'GET   ';
+    const url = ctx.req.url || '/';
+    const statusIcon = status < 400 ? '✓' : status < 500 ? '⚠' : '✗';
+    console.log(`${timestamp} ${statusIcon} ${method} ${url} ${status} ${duration}ms`);
+  }
 }
 
 const server = http.createServer(async (req, res) => {
+  const startTime = Date.now();
+  requestContexts.set(res, { req, startTime });
+  
   const url = new URL(req.url || '/', `http://${req.headers.host}`);
 
   if (req.method === 'GET' && url.pathname === '/health') {
