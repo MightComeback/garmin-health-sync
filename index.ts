@@ -249,19 +249,22 @@ async function syncGarminData(): Promise<{ activities: number; days: number }> {
   for (let i = 0; i < 30; i++) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = date.toISOString().split('T')[0]!;
 
     const summary = await garmin.getDailySummary(dateStr);
     if (summary) {
       const hrv = await garmin.getHrvData(dateStr);
       
+      const dayValue: string = summary.calendarDate! || dateStr;
+      const stepsValue: number = summary.steps! || 0;
+      
       insertDaily.run(
-        summary.calendarDate || dateStr,
-        summary.steps || 0,
-        summary.restingHeartRate || null,
-        summary.bodyBattery?.lastDayValue || null,
-        summary.sleepTimeInSeconds || null,
-        hrv?.status || null,
+        dayValue,
+        stepsValue,
+        summary.restingHeartRate ?? null,
+        summary.bodyBattery?.lastDayValue ?? null,
+        summary.sleepTimeInSeconds ?? null,
+        hrv?.status ?? null,
         JSON.stringify({ summary, hrv })
       );
       daysSynced++;
@@ -296,7 +299,10 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === 'GET' && url.pathname.startsWith('/activities/')) {
-    const activityId = url.pathname.split('/')[2];
+    const activityId = url.pathname.split('/')[2] || '';
+    if (!activityId) {
+      return json(res, 400, { error: 'activity_id_required' });
+    }
     const row = db.prepare('SELECT * FROM activities WHERE id = ?').get(activityId) as { id: string; rawJson: string; [key: string]: unknown } | undefined;
     if (!row) {
       return json(res, 404, { error: 'activity_not_found' });
