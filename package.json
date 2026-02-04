@@ -8,7 +8,8 @@
     "start": "bun index.ts",
     "cli": "bun cli.ts",
     "sync": "bun cli.ts sync",
-    "status": "bun cli.ts status"
+    "status": "bun cli.ts status",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
