@@ -27,10 +27,13 @@ async function fetchApi(path: string, method = 'GET', body?: unknown) {
   return res.json();
 }
 
+type HealthResponse = { db: string; garminConfigured: boolean; garminAuthenticated: boolean };
+type SyncStatusResponse = { recent: Array<{ startedAt: string; status: string; details?: string }> };
+
 async function status() {
   try {
-    const health = await fetchApi('/health');
-    const syncStatus = await fetchApi('/sync/status');
+    const health = await fetchApi('/health') as HealthResponse;
+    const syncStatus = await fetchApi('/sync/status') as SyncStatusResponse;
     
     console.log('\n📊 Garmin Health Sync Status\n');
     console.log(`  Database: ${health.db}`);
@@ -52,10 +55,12 @@ async function status() {
   }
 }
 
+type SyncResponse = { ok: boolean; synced: { activities: number; days: number }; logId: number };
+
 async function sync() {
   console.log('🔄 Triggering sync...\n');
   try {
-    const result = await fetchApi('/sync', 'POST');
+    const result = await fetchApi('/sync', 'POST') as SyncResponse;
     console.log('✅ Sync complete!');
     console.log(`   Activities: ${result.synced.activities}`);
     console.log(`   Days: ${result.synced.days}`);
@@ -66,9 +71,12 @@ async function sync() {
   }
 }
 
+type ActivityItem = { startTime: string; type: string; name: string; distanceMeters: number };
+type ActivitiesResponse = { items: ActivityItem[] };
+
 async function activities(limit = 10) {
   try {
-    const data = await fetchApi('/activities');
+    const data = await fetchApi('/activities') as ActivitiesResponse;
     const items = data.items.slice(0, limit);
     
     console.log(`\n🏃 Last ${items.length} Activities\n`);
@@ -88,9 +96,12 @@ async function activities(limit = 10) {
   }
 }
 
+type DailyMetric = { day: string; steps?: number; restingHeartRate?: number; bodyBattery?: number; sleepSeconds?: number };
+type DailyResponse = { items: DailyMetric[] };
+
 async function daily() {
   try {
-    const data = await fetchApi('/daily');
+    const data = await fetchApi('/daily') as DailyResponse;
     
     console.log('\n📅 Daily Metrics (Last 7 Days)\n');
     console.log('  Date       | Steps    | RHR | Battery | Sleep');
