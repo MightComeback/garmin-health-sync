@@ -536,6 +536,61 @@ const server = http.createServer(async (req, res) => {
     return json(res, 200, { recent });
   }
 
+  if (req.method === 'GET' && url.pathname === '/export/activities') {
+    const format = url.searchParams.get('format') || 'json';
+    const rows = db.prepare(`
+      SELECT id, provider, startTime, type, name, distanceMeters, durationSeconds, calories,
+             averageHR, maxHR, averageSpeed, maxSpeed, elevationGain, elevationLoss, description, locationName
+      FROM activities ORDER BY startTime DESC
+    `).all();
+    
+    if (format === 'csv') {
+      const headers = ['id', 'provider', 'startTime', 'type', 'name', 'distanceMeters', 'durationSeconds', 'calories', 'averageHR', 'maxHR', 'averageSpeed', 'maxSpeed', 'elevationGain', 'elevationLoss', 'description', 'locationName'];
+      const csvRows = [headers.join(',')];
+      for (const row of rows as Record<string, string | number | null>[]) {
+        csvRows.push(headers.map(h => {
+          const val = row[h];
+          if (val === null) return '';
+          const str = String(val).replace(/"/g, '""');
+          return str.includes(',') || str.includes('\n') ? `"${str}"` : str;
+        }).join(','));
+      }
+      res.writeHead(200, { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'attachment; filename="activities.csv"' });
+      res.end(csvRows.join('\n'));
+      return;
+    }
+    
+    return json(res, 200, { items: rows, count: rows.length });
+  }
+
+  if (req.method === 'GET' && url.pathname === '/export/daily') {
+    const format = url.searchParams.get('format') || 'json';
+    const rows = db.prepare(`
+      SELECT day, steps, restingHeartRate, bodyBattery, sleepSeconds, sleepScore,
+             deepSleepSeconds, lightSleepSeconds, remSleepSeconds, awakeSleepSeconds,
+             avgSpO2, avgRespiration, avgStressLevel, hrvStatus
+      FROM daily_metrics ORDER BY day DESC
+    `).all();
+    
+    if (format === 'csv') {
+      const headers = ['day', 'steps', 'restingHeartRate', 'bodyBattery', 'sleepSeconds', 'sleepScore', 'deepSleepSeconds', 'lightSleepSeconds', 'remSleepSeconds', 'awakeSleepSeconds', 'avgSpO2', 'avgRespiration', 'avgStressLevel', 'hrvStatus'];
+      const csvRows = [headers.join(',')];
+      for (const row of rows as Record<string, string | number | null>[]) {
+        csvRows.push(headers.map(h => {
+          const val = row[h];
+          if (val === null) return '';
+          const str = String(val).replace(/"/g, '""');
+          return str.includes(',') || str.includes('\n') ? `"${str}"` : str;
+        }).join(','));
+      }
+      res.writeHead(200, { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'attachment; filename="daily_metrics.csv"' });
+      res.end(csvRows.join('\n'));
+      return;
+    }
+    
+    return json(res, 200, { items: rows, count: rows.length });
+  }
+
   if (req.method === 'GET' && url.pathname === '/scheduler') {
     const status = scheduler?.getStatus() ?? { enabled: false, intervalMs: 0, lastSyncAt: null, nextSyncAt: null, isSyncing: false };
     return json(res, 200, { 
