@@ -24,6 +24,14 @@ db.exec(`
     distanceMeters REAL,
     durationSeconds REAL,
     calories REAL,
+    averageHR INTEGER,
+    maxHR INTEGER,
+    averageSpeed REAL,
+    maxSpeed REAL,
+    elevationGain REAL,
+    elevationLoss REAL,
+    description TEXT,
+    locationName TEXT,
     rawJson TEXT
   );
 
@@ -62,6 +70,19 @@ type GarminActivity = {
   distance?: number;
   calories?: number;
   activityType?: { typeKey: string };
+};
+
+type GarminActivityDetail = {
+  activityId: number;
+  activityName: string;
+  description?: string;
+  locationName?: string;
+  averageHR?: number;
+  maxHR?: number;
+  averageSpeed?: number;
+  maxSpeed?: number;
+  elevationGain?: number;
+  elevationLoss?: number;
 };
 
 type DailySummary = {
@@ -216,6 +237,15 @@ class GarminConnectClient {
     return data as GarminActivity[];
   }
 
+  async getActivityDetail(activityId: number): Promise<GarminActivityDetail | null> {
+    try {
+      const data = await this.request(`/activity-service/activity/${activityId}`);
+      return data as GarminActivityDetail;
+    } catch {
+      return null;
+    }
+  }
+
   async getDailySummary(date: string): Promise<DailySummary | null> {
     try {
       const data = await this.request(`/wellness-service/wellness/dailySummary/${date}`);
@@ -283,11 +313,15 @@ async function syncGarminData(): Promise<{ activities: number; days: number }> {
   const activities = await garmin.getActivities(50);
   const insertActivity = db.prepare(`
     INSERT OR REPLACE INTO activities 
-    (id, provider, startTime, type, name, distanceMeters, durationSeconds, calories, rawJson)
-    VALUES (?, 'garmin', ?, ?, ?, ?, ?, ?, ?)
+    (id, provider, startTime, type, name, distanceMeters, durationSeconds, calories, 
+     averageHR, maxHR, averageSpeed, maxSpeed, elevationGain, elevationLoss, description, locationName, rawJson)
+    VALUES (?, 'garmin', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
   for (const act of activities) {
+    // Fetch detailed activity data for advanced metrics
+    const detail = await garmin.getActivityDetail(act.activityId);
+    
     insertActivity.run(
       String(act.activityId),
       act.startTimeLocal,
@@ -296,7 +330,15 @@ async function syncGarminData(): Promise<{ activities: number; days: number }> {
       act.distance || 0,
       act.duration,
       act.calories || 0,
-      JSON.stringify(act)
+      detail?.averageHR ?? null,
+      detail?.maxHR ?? null,
+      detail?.averageSpeed ?? null,
+      detail?.maxSpeed ?? null,
+      detail?.elevationGain ?? null,
+      detail?.elevationLoss ?? null,
+      detail?.description ?? null,
+      detail?.locationName ?? null,
+      JSON.stringify({ summary: act, detail })
     );
     activitiesSynced++;
   }
@@ -395,15 +437,18 @@ const server = http.createServer(async (req, res) => {
     if (!activityId) {
       return json(res, 400, { error: 'activity_id_required' });
     }
-    const row = db.prepare('SELECT * FROM activities WHERE id = ?').get(activityId) as { id: string; rawJson: string; [key: string]: unknown } | undefined;
+    const row = db.prepare(`
+      SELECT id, provider, startTime, type, name, distanceMeters, durationSeconds, calories,
+             averageHR, maxHR, averageSpeed, maxSpeed, elevationGain, elevationLoss, description, locationName
+      FROM activities WHERE id = ?
+    `).get(activityId) as { 
+      id: string; provider: string; startTime: string; type: string; name: string;
+      distanceMeters: number; durationSeconds: number; calories: number;
+      averageHR: number | null; maxHR: number | null; averageSpeed: number | null; maxSpeed: number | null;
+      elevationGain: number | null; elevationLoss: number | null; description: string | null; locationName: string | null;
+    } | undefined;
     if (!row) {
       return json(res, 404, { error: 'activity_not_found' });
-    }
-    let fullData: unknown = null;
-    try {
-      fullData = JSON.parse(row.rawJson);
-    } catch {
-      fullData = null;
     }
     return json(res, 200, { 
       id: row.id,
@@ -414,7 +459,16 @@ const server = http.createServer(async (req, res) => {
       distanceMeters: row.distanceMeters,
       durationSeconds: row.durationSeconds,
       calories: row.calories,
-      raw: fullData
+      raw: {
+        averageHR: row.averageHR ?? undefined,
+        maxHR: row.maxHR ?? undefined,
+        averageSpeed: row.averageSpeed ?? undefined,
+        maxSpeed: row.maxSpeed ?? undefined,
+        elevationGain: row.elevationGain ?? undefined,
+        elevationLoss: row.elevationLoss ?? undefined,
+        description: row.description ?? undefined,
+        locationName: row.locationName ?? undefined,
+      }
     });
   }
 
