@@ -1,12 +1,11 @@
 {
   "name": "garmin-health-sync",
-  "version": "1.0.0",
-  "type": "commonjs",
-  "main": "dist/index.cjs",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
   "scripts": {
-    "build": "esbuild index.ts --bundle --platform=node --outfile=dist/index.cjs",
     "dev": "bun --watch index.ts",
-    "start": "node dist/index.cjs",
+    "start": "bun index.ts",
     "cli": "bun cli.ts",
     "sync": "bun cli.ts sync",
     "status": "bun cli.ts status",
@@ -16,7 +15,11 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/bun": "latest",
     "esbuild": "^0.27.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.2",
