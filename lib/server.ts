@@ -92,36 +92,34 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Garmin Connect authorization
-app.get('/auth/url', (req, res) => {
-  const url = garminService.getAuthorizationUrl();
-  res.json({ ok: true, authorizationUrl: url });
-});
+// Garmin Connect authorization - email/password login
+app.post('/auth/login', async (req, res) => {
+  const { email, password } = req.body;
 
-app.post('/auth/callback', async (req, res) => {
-  const { code } = req.body;
-
-  if (!code) {
-    return res.status(400).json({ ok: false, error: 'Authorization code required' });
+  if (!email || !password) {
+    return res.status(400).json({ ok: false, error: 'Email and password required' });
   }
 
   try {
-    await garminService.exchangeCodeForTokens(code);
+    await garminService.login(email, password);
 
     // Update database
     await new Promise<void>((resolve, reject) => {
-      db?.run('UPDATE sync_status SET garmin_authenticated = 1, garmin_configured = 1 WHERE id = 1', function(err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
+      db?.run(
+        'UPDATE sync_status SET garmin_authenticated = 1, garmin_configured = 1 WHERE id = 1',
+        function(err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        },
+      );
     });
 
     res.json({ ok: true, message: 'Authenticated successfully' });
   } catch (error) {
-    console.error('Auth callback error:', error);
+    console.error('Login error:', error);
     res.status(500).json({ ok: false, error: error instanceof Error ? error.message : 'Authentication failed' });
   }
 });

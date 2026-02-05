@@ -1,6 +1,7 @@
 /**
  * Garmin Connect API Service
- * Handles authentication and data fetching
+ * Handles authentication and data fetching via reverse-engineered API
+ * Reference: python-garminconnect (cyberjunky/python-garminconnect)
  */
 
 export interface Activity {
@@ -43,117 +44,257 @@ interface AuthTokens {
   expiresAt: Date;
 }
 
+interface ActivityList {
+  userId?: string;
+  activities: Activity[];
+}
+
+interface DailyStats {
+  steps?: number;
+  activeZoneMinutes?: any;
+  sleep?: {
+    summary: {
+      stages: {
+        deep?: number;
+        deepRem?: number;
+        deepSleep?: number;
+        lie?: number;
+        rem?: number;
+        remStages?: number;
+        remSleep?: number;
+        light?: number;
+        lightStages?: number;
+        lightSleep?: number;
+        awake?: number;
+        awakeStages?: number;
+      };
+      totalDuration: number;
+    };
+    endTime: number;
+    startTime: number;
+  };
+  hr?: {
+    zones: {
+      maximum: number;
+      peak: number;
+      cardio: number;
+    };
+  };
+  stress?: number;
+  sleepScore?: number;
+}
+
 export class GarminService {
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
   private expiresAt: Date | null = null;
   private readonly AUTH_URL = 'https://connectapi.garmin.com/auth/oauth';
   private readonly API_URL = 'https://connectapi.garmin.com/connect-api';
+  private readonly BASE_URL = 'https://connect.garmin.com/modern';
+  private email: string | null = null;
+  private password: string | null = null;
+  private authTokens: Record<string, AuthTokens> = {};
 
   isAuthenticated(): boolean {
-    if (!this.accessToken || !this.expiresAt) return false;
-    return new Date() < this.expiresAt;
+    return this.accessToken && this.expiresAt ? new Date() < this.expiresAt : false;
+  }
+
+  async login(email: string, password: string): Promise<void> {
+    this.email = email;
+    this.password = password;
+
+    // Basic auth header for login
+    const auth = Buffer.from(`${email}:${password}`).toString('base64');
+    const loginUrl = `${this.BASE_URL}/user/profile`;
+    const payload = {
+      verifyCode: '',
+      password: password,
+      rememberMe: 'true',
+      deviceId: generateDeviceId(),
+      joinLoyaltyProgram: 'false',
+    };
+
+    const response = await fetch(loginUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Login failed: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json() as string;
+    this.accessToken = data;
+
+    // Set 8-hour expiration
+    this.expiresAt = new Date(Date.now() + 8 * 60 * 60 * 1000);
   }
 
   getAuthorizationUrl(): string {
-    // TODO: Implement proper Garmin OAuth 2.0 authorization
-    // This is a placeholder - actual implementation requires:
-    // 1. Client ID and secret from Garmin Developer portal
-    // 2. Proper redirect URI configuration
-    // 3. OAuth 2.0 authorization flow
+    // Legacy OAuth flow (replaced by email/password login)
     return 'https://health-profile.garmin.com/profile/auth/v3/webClient/authorize';
   }
 
   async exchangeCodeForTokens(code: string): Promise<void> {
-    // TODO: Implement token exchange
-    // In production, this would:
-    // 1. Exchange authorization code for access token
-    // 2. Fetch refresh token
-    // 3. Store tokens securely
-    // 4. Set expiration time
-
-    const expiresInSeconds = 3600; // 1 hour
-    this.accessToken = 'mock_access_token';
-    this.refreshToken = 'mock_refresh_token';
-    this.expiresAt = new Date(Date.now() + expiresInSeconds * 1000);
+    throw new Error('OAuth 2.0 flow is not used. Please use login() with email/password instead.');
   }
 
   async clearTokens(): Promise<void> {
     this.accessToken = null;
     this.refreshToken = null;
     this.expiresAt = null;
+    this.email = null;
+    this.password = null;
   }
 
-  private ensureAuthenticated(): void {
+  private async ensureAuthenticated(): void {
     if (!this.isAuthenticated()) {
-      throw new Error('Not authenticated with Garmin Connect');
+      if (!this.email || !this.password) {
+        throw new Error('Not authenticated. Call login() with email and password first.');
+      }
+      await this.login(this.email, this.password);
     }
   }
 
-  private async makeRequest(endpoint: string): Promise<any> {
+  private async makeRequest(endpoint: string, method: 'GET' | 'POST' | 'DELETE' = 'GET', body?: unknown): Promise<any> {
     this.ensureAuthenticated();
 
-    try {
-      const response = await fetch(`${this.API_URL}${endpoint}`, {
-        headers: {
-          'Authorization': `Bearer ${this.accessToken}`,
-          'Accept': 'application/json',
-        },
-      });
+    const headers: Record<string, string> = {
+      'Authorization': `Bearer ${this.accessToken}`,
+      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)',
+    };
 
-      if (!response.ok) {
-        throw new Error(`Garmin API error: ${response.status}`);
+    const config: RequestInit = { method, headers };
+    if (body) config.body = JSON.stringify(body);
+
+    const response = await fetch(`${this.API_URL}${endpoint}`, config);
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        // Token expired, try refreshing
+        await this.refreshAccessToken();
+        return this.makeRequest(endpoint, method, body);
       }
-
-      return await response.json();
-    } catch (error) {
-      console.error('API request error:', error);
-      throw error;
+      throw new Error(`Garmin API error: ${response.status} ${response.statusText}`);
     }
+
+    return response.json();
+  }
+
+  private async refreshAccessToken(): Promise<void> {
+    if (!this.email || !this.password) {
+      throw new Error('Cannot refresh token: credentials not available');
+    }
+
+    // Re-login to get fresh token
+    await this.login(this.email, this.password);
   }
 
   async getActivities(days: number = 30): Promise<Activity[]> {
-    // TODO: Implement actual Garmin activities endpoint
-    // This should fetch activities from Garmin Connect API
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
-    console.log(`Fetching activities for ${days} days from ${startDate.toISOString()} to ${endDate.toISOString()}`);
+    const startStr = startDate.toISOString().split('T')[0];
+    const endStr = endDate.toISOString().split('T')[0];
 
-    // Mock data for now
-    return Array.from({ length: days }, (_, i) => ({
-      summary: {
-        totalCalories: Math.floor(Math.random() * 3000) + 500,
-        movingDuration: Math.floor(Math.random() * 7200),
-      },
-      startDateLocal: new Date(startDate.getTime() + i * 86400000).toISOString(),
-    }));
+    // Get user ID first
+    const userResponse = await this.makeRequest('/user/profile-service/useractivity-summary/byDate/' + startStr);
+    const userId = userResponse.userId;
+
+    if (!userId) {
+      throw new Error('Unable to retrieve user ID');
+    }
+
+    // Get activities using user activity summary endpoint
+    const activityUrl = `${this.API_URL}/useractivity-service/useractivity-summary/activity-list/${userId}`;
+    const activityPayload = {
+      activityType: 'All',
+      dateStyle: 'TODAY',
+      editLink: false,
+      endTimeLocal: endStr,
+      findActivityType: 'All',
+      interval: 'day',
+      locale: 'en-US',
+      nextPageToken: '',
+      pageTitle: 'Activities',
+      previousPageToken: '',
+      requirement: 'statsSummary',
+      responseType: 'summary',
+      startTimeLocal: startStr,
+      syncUserProfileActivities: false,
+    };
+
+    const activityData = await this.makeRequest(activityUrl, 'POST', activityPayload);
+    const activities = (activityData.activitySummaries || []) as Activity[];
+
+    return activities;
   }
 
-  async getWellnessData(date: string): Promise<WellnessData> {
-    // TODO: Implement actual Garmin wellness endpoint
-    // This should fetch sleep, HRV, body battery data for a specific date
+  async getWellnessData(dateStr: string): Promise<WellnessData> {
+    const date = new Date(dateStr);
+    const dateParts = date.toISOString().split('T');
+    const dateComps = `${dateParts[0]} ${dateParts[1].split('.')[0]}:00:00`;
 
-    console.log(`Fetching wellness data for ${date}`);
+    // Get daily stats via user activity summary
+    const statsUrl = `${this.API_URL}/useractivity-service/useractivity-summary/byDate/${dateParts[0]}`;
+
+    try {
+      const statsData: DailyStats = await this.makeRequest(statsUrl);
+
+      return {
+        restingHeartRate: this.parseHeartRate(statsData.hr?.zones),
+        sleep: this.parseSleep(statsData.sleep),
+        hrvStatus: statsData.stress ? 'Stressed' : 'Normal',
+        bodyBattery: statsData.sleepScore !== undefined ? { value: Math.round(statsData.sleepScore) } : null,
+      };
+    } catch (error) {
+      console.error(`Error fetching wellness data for ${dateStr}:`, error);
+      throw error;
+    }
+  }
+
+  private parseHeartRate(zones?: any): number | null {
+    if (!zones) return null;
+    if (zones.cardio !== undefined) return zones.cardio;
+    if (zones.peak !== undefined) return zones.peak;
+    return zones.maximum || null;
+  }
+
+  private parseSleep(sleepData?: DailyStats['sleep']): WellnessData['sleep'] | null {
+    if (!sleepData?.summary?.totalDuration) return null;
 
     return {
-      restingHeartRate: Math.floor(Math.random() * 30) + 55,
-      sleep: {
-        duration: Math.floor(Math.random() * 480) + 400,
-        stages: {
-          deep: Math.floor(Math.random() * 120) + 60,
-          light: Math.floor(Math.random() * 240) + 120,
-          rem: Math.floor(Math.random() * 120) + 60,
-          awake: Math.floor(Math.random() * 30),
-        },
-      },
-      hrvStatus: Math.random() > 0.5 ? 'Elevated' : 'Normal',
-      bodyBattery: {
-        value: Math.floor(Math.random() * 100),
+      duration: sleepData.summary.totalDuration,
+      stages: {
+        deep: sleepData.summary.stages?.deep || 0,
+        light: sleepData.summary.stages?.light || 0,
+        rem: sleepData.summary.stages?.rem || 0,
+        awake: sleepData.summary.stages?.awake || 0,
       },
     };
   }
+}
+
+// Helper function to generate device ID for Garmin login
+function generateDeviceId(): string {
+  // Generate a random device ID similar to iOS devices
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  let result = '';
+  for (let i = 0; i < 36; i++) {
+    if (i === 8 || i === 13 || i === 18 || i === 23) {
+      result += '-';
+    } else {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+  }
+  return result;
 }
 
 export const garminService = new GarminService();
