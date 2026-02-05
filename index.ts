@@ -791,6 +791,7 @@ const server = http.createServer(async (req, res) => {
           <tr><td>GET</td><td>/activities</td><td>List all activities</td></tr>
           <tr><td>GET</td><td>/activities/{id}</td><td>Activity details</td></tr>
           <tr><td>GET</td><td>/daily</td><td>Daily metrics history</td></tr>
+          <tr><td>GET</td><td>/trends</td><td>Health trends (sleep, stress, HRV, body battery)</td></tr>
           <tr><td>POST</td><td>/sync</td><td>Trigger Garmin sync</td></tr>
           <tr><td>GET</td><td>/sync/status</td><td>Sync history log</td></tr>
           <tr><td>GET</td><td>/export/activities</td><td>Export activities (JSON/CSV)</td></tr>
@@ -805,6 +806,83 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
     res.end(html);
     return;
+  }
+
+  // Helper functions for trends calculation
+  function calculateSleepQuality(sleepSeconds: number | null, sleepScore: number | null): string {
+    if (sleepSeconds === null || sleepSeconds < 3600) return 'poor'; // Less than 6 hours
+    if (sleepScore === null) {
+      const hours = sleepSeconds / 3600;
+      const deepRatio = hours > 6 && (hours * 0.25 > (sleepSeconds * 0.25)) ? 'good' : 'fair';
+      return deepRatio;
+    }
+    if (sleepScore >= 80) return 'excellent';
+    if (sleepScore >= 70) return 'good';
+    if (sleepScore >= 50) return 'fair';
+    return 'poor';
+  }
+
+  function calculateAvgSteps(data: Array<{ day: string; steps?: number | null }>): number {
+    const validSteps = data.filter(d => d.steps !== null && d.steps !== undefined);
+    if (validSteps.length === 0) return 0;
+    return validSteps.reduce((sum, d) => sum + (d.steps || 0), 0) / validSteps.length;
+  }
+
+  // /trends endpoint - returns health trend data for the Expo app
+  if (req.method === 'GET' && url.pathname === '/trends') {
+    const daysParam = url.searchParams.get('days') || '30';
+    const days = Math.min(Math.max(parseInt(daysParam, 10), 7), 90); // Limit between 7 and 90 days
+
+    const recentData = db.prepare(`
+      SELECT day,
+             bodyBattery,
+             sleepSeconds,
+             sleepScore,
+             deepSleepSeconds,
+             lightSleepSeconds,
+             remSleepSeconds,
+             avgStressLevel,
+             avgRespiration,
+             avgSpO2,
+             hrvStatus
+      FROM daily_metrics
+      WHERE day >= date('now', '-' || ? || ' days')
+      ORDER BY day ASC
+    `).all(days) as Array<{
+      day: string;
+      bodyBattery: number | null;
+      sleepSeconds: number | null;
+      sleepScore: number | null;
+      deepSleepSeconds: number | null;
+      lightSleepSeconds: number | null;
+      remSleepSeconds: number | null;
+      avgStressLevel: number | null;
+      avgRespiration: number | null;
+      avgSpO2: number | null;
+      hrvStatus: string | null;
+    }>;
+
+    // Calculate trends
+    const trends = recentData.length > 1 ? {
+      hrv: recentData.map(d => d.hrvStatus).filter(Boolean).length / recentData.length,
+      stress: recentData.reduce((sum, d) => sum + (d.avgStressLevel || 0), 0) / (recentData.length || 1),
+      bodyBattery: recentData.map(d => d.bodyBattery || 0),
+      sleep: recentData.map(d => ({
+        day: d.day,
+        score: d.sleepScore,
+        duration: d.sleepSeconds,
+        deepRatio: d.deepSleepSeconds ? (d.deepSleepSeconds / (d.sleepSeconds || 1) * 100) : null,
+        quality: calculateSleepQuality(d.sleepSeconds, d.sleepScore)
+      })),
+      avgSteps: calculateAvgSteps(recentData)
+    } : null;
+
+    return json(res, 200, {
+      period: days,
+      latest: recentData[recentData.length - 1],
+      trend: trends,
+      recent: recentData
+    });
   }
 
   return json(res, 404, { error: 'not_found' });
