@@ -490,13 +490,18 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === 'GET' && url.pathname === '/daily') {
+    const daysParam = url.searchParams.get('days');
+    const days = daysParam ? parseInt(daysParam, 10) : 60;
+    const limit = Math.max(7, Math.min(days, 365)); // Cap at 365 days
+
     const rows = db.prepare(`
       SELECT day, steps, restingHeartRate, bodyBattery, sleepSeconds, sleepScore,
              deepSleepSeconds, lightSleepSeconds, remSleepSeconds, awakeSleepSeconds,
              avgSpO2, avgRespiration, avgStressLevel, hrvStatus
-      FROM daily_metrics ORDER BY day DESC LIMIT 60
-    `).all();
-    return json(res, 200, { items: rows });
+      FROM daily_metrics ORDER BY day DESC LIMIT ?
+    `).all(limit);
+
+    return json(res, 200, { items: rows, days });
   }
 
   if (req.method === 'POST' && url.pathname === '/sync') {
