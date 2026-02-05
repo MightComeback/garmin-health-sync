@@ -7,8 +7,9 @@
     
     <key>ProgramArguments</key>
     <array>
-        <string>/opt/homebrew/bin/node</string>
-        <string>dist/index.cjs</string>
+        <string>/usr/local/bin/bun</string>
+        <string>run</string>
+        <string>start</string>
     </array>
     
     <key>WorkingDirectory</key>
@@ -20,8 +21,6 @@
         <string>/Users/might/clawd/repos/garmin-health-sync/garmin.sqlite</string>
         <key>GARMIN_SYNC_PORT</key>
         <string>17890</string>
-        <key>AUTO_SYNC_INTERVAL</key>
-        <string>1</string>
     </dict>
     
     <key>RunAtLoad</key>
