@@ -1,0 +1,4 @@
+garmin-health-sync listening on http://127.0.0.1:17890 (db: ./garmin.sqlite)
+POST /sync to trigger Garmin Connect sync
+2026-02-05T10:08:59.899Z ✓ GET    /health 200 2ms
+2026-02-05T10:14:31.945Z ✓ GET    /health 200 0ms
