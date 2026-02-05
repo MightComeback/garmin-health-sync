@@ -18,7 +18,7 @@ async function fetchApi(path: string, method = 'GET', body?: unknown) {
     headers: { 'content-type': 'application/json' },
   };
   if (body) options.body = JSON.stringify(body);
-  
+
   const res = await fetch(`${API_URL}${path}`, options);
   if (!res.ok) {
     const err = await res.text();
@@ -34,12 +34,12 @@ async function status() {
   try {
     const health = await fetchApi('/health') as HealthResponse;
     const syncStatus = await fetchApi('/sync/status') as SyncStatusResponse;
-    
+
     console.log('\n📊 Garmin Health Sync Status\n');
     console.log(`  Database: ${health.db}`);
     console.log(`  Garmin Configured: ${health.garminConfigured ? '✅' : '❌'}`);
     console.log(`  Garmin Authenticated: ${health.garminAuthenticated ? '✅' : '❌'}`);
-    
+
     if (syncStatus.recent?.length > 0) {
       console.log('\n  Recent Syncs:');
       for (const sync of syncStatus.recent.slice(0, 5)) {
@@ -78,14 +78,14 @@ async function activities(limit = 10) {
   try {
     const data = await fetchApi('/activities') as ActivitiesResponse;
     const items = data.items.slice(0, limit);
-    
+
     console.log(`\n🏃 Last ${items.length} Activities\n`);
     for (const act of items) {
-      const date = new Date(act.startTime).toLocaleDateString('en-US', { 
-        month: 'short', day: 'numeric' 
+      const date = new Date(act.startTime).toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric'
       });
-      const dist = act.distanceMeters >= 1000 
-        ? `${(act.distanceMeters / 1000).toFixed(2)}km` 
+      const dist = act.distanceMeters >= 1000
+        ? `${(act.distanceMeters / 1000).toFixed(2)}km`
         : `${act.distanceMeters}m`;
       console.log(`  ${date} | ${act.type.padEnd(12)} | ${act.name.slice(0, 30).padEnd(32)} | ${dist}`);
     }
@@ -102,17 +102,17 @@ type DailyResponse = { items: DailyMetric[] };
 async function daily() {
   try {
     const data = await fetchApi('/daily') as DailyResponse;
-    
+
     console.log('\n📅 Daily Metrics (Last 7 Days)\n');
     console.log('  Date       | Steps    | RHR | Battery | Sleep');
     console.log('  ' + '-'.repeat(50));
-    
+
     for (const m of data.items.slice(0, 7)) {
       const steps = m.steps?.toLocaleString().padStart(6) || '    --';
       const rhr = m.restingHeartRate?.toString().padStart(3) || '--';
       const battery = m.bodyBattery?.toString().padStart(3) || '--';
-      const sleep = m.sleepSeconds 
-        ? `${Math.floor(m.sleepSeconds / 3600)}h${Math.floor((m.sleepSeconds % 3600) / 60)}m` 
+      const sleep = m.sleepSeconds
+        ? `${Math.floor(m.sleepSeconds / 3600)}h${Math.floor((m.sleepSeconds % 3600) / 60)}m`
         : '--';
       console.log(`  ${m.day} | ${steps} | ${rhr} | ${battery}% | ${sleep}`);
     }
@@ -141,21 +141,25 @@ Environment:
 `);
 }
 
-switch (command) {
-  case 'status':
-    await status();
-    break;
-  case 'sync':
-    await sync();
-    break;
-  case 'activities':
-    await activities(parseInt(process.argv[3] || '10', 10));
-    break;
-  case 'daily':
-    await daily();
-    break;
-  case 'help':
-  default:
-    help();
-    break;
+async function main() {
+  switch (command) {
+    case 'status':
+      await status();
+      break;
+    case 'sync':
+      await sync();
+      break;
+    case 'activities':
+      await activities(parseInt(process.argv[3] || '10', 10));
+      break;
+    case 'daily':
+      await daily();
+      break;
+    case 'help':
+    default:
+      help();
+      break;
+  }
 }
+
+main();
