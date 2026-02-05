@@ -7,21 +7,11 @@
     
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/local/bin/bun</string>
-        <string>run</string>
-        <string>start</string>
+        <string>/Users/might/clawd/repos/garmin-health-sync/run.sh</string>
     </array>
     
     <key>WorkingDirectory</key>
     <string>/Users/might/clawd/repos/garmin-health-sync</string>
-    
-    <key>EnvironmentVariables</key>
-    <dict>
-        <key>GARMIN_DB_PATH</key>
-        <string>/Users/might/clawd/repos/garmin-health-sync/garmin.sqlite</string>
-        <key>GARMIN_SYNC_PORT</key>
-        <string>17890</string>
-    </dict>
     
     <key>RunAtLoad</key>
     <true/>

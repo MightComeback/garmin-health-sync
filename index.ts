@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 import http from 'node:http';
-import { SyncScheduler } from './scheduler';
+import { SyncScheduler } from './scheduler.js';
 
 const DB_PATH = process.env.GARMIN_DB_PATH || './garmin.sqlite';
 const PORT = Number(process.env.GARMIN_SYNC_PORT || 17890);
