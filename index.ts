@@ -504,7 +504,34 @@ const server = http.createServer(async (req, res) => {
     return json(res, 200, { items: rows, days });
   }
 
-  if (req.method === 'POST' && url.pathname === '/sync') {
+  if (req.method === 'GET' && url.pathname.startsWith('/wellness/')) {
+  const date = url.pathname.split('/')[2];
+  if (!date) {
+    return json(res, 400, { error: 'date_required' });
+  }
+  const row = db.prepare(`
+    SELECT day, steps, restingHeartRate, sleepSeconds, sleepScore, bodyBattery, hrvStatus, avgStressLevel, deepSleepSeconds, lightSleepSeconds, remSleepSeconds, avgSpO2, avgRespiration
+    FROM daily_metrics WHERE day = ?
+  `).get(date) as any;
+  if (!row) {
+    return json(res, 404, { error: 'no_data_for_date' });
+  }
+  return json(res, 200, {
+    ok: true,
+    date: row.day,
+    wellness: {
+      steps: row.steps ?? null,
+      restingHeartRate: row.restingHeartRate ?? null,
+      sleep: row.sleepSeconds ? { duration: row.sleepSeconds } : null,
+      sleepScore: row.sleepScore ?? null,
+      bodyBattery: row.bodyBattery ? { value: row.bodyBattery } : null,
+      hrvStatus: row.hrvStatus ?? null,
+      stress: row.avgStressLevel ?? null,
+    }
+  });
+}
+
+if (req.method === 'POST' && url.pathname === '/sync') {
     const logStmt = db.prepare('INSERT INTO sync_log (startedAt, status, details) VALUES (?, ?, ?)');
     const startTime = new Date().toISOString();
     const logId = logStmt.run(startTime, 'running', 'Garmin sync started').lastInsertRowid;
