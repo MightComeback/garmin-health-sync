@@ -184,7 +184,7 @@ app.get('/activities', async (req, res) => {
       });
     }
 
-    res.json({ ok: true, activities, count: activities.length });
+    res.json({ items: activities });
   } catch (error) {
     console.error('Error fetching activities:', error);
     res.status(500).json({ ok: false, error: error instanceof Error ? error.message : 'Failed to fetch activities' });
@@ -426,6 +426,44 @@ app.post('/sync', async (req, res) => {
     console.error('Sync log error:', error);
     res.status(500).json({ ok: false, error: error instanceof Error ? error.message : 'Failed to start sync' });
   }
+});
+
+app.get('/trends', (req, res) => {
+  const daysStr = (req.query.days as string) || '30';
+  const days = parseInt(daysStr, 10) || 30;
+
+  db?.all('SELECT * FROM daily_metrics ORDER BY date DESC LIMIT ?', [days], (err, rows: any[]) => {
+    if (err) {
+      res.status(500).json({ ok: false, error: err.message });
+      return;
+    }
+
+    const recent = rows.slice(0, 7).map((r: any) => ({
+      day: r.date,
+      steps: r.steps || 0,
+      bodyBattery: r.body_battery || 0,
+      sleepSeconds: r.sleep_seconds || 0,
+    }));
+
+    const avgSteps = rows.length > 0 ? Math.round(rows.reduce((sum: number, r: any) => sum + (r.steps || 0), 0) / rows.length) : 0;
+
+    res.json({
+      period: days,
+      latest: recent[0] || null,
+      trend: {
+        avgSteps,
+        bodyBattery: rows.map((r: any) => r.body_battery || 0),
+        sleep: recent.map((d: any) => ({
+          day: d.day,
+          score: Math.min(Math.round(100 * (d.sleepSeconds || 0) / (8 * 3600)), 100),
+          duration: Math.round((d.sleepSeconds || 0) / 3600 * 10) / 10,
+          deepRatio: 0.25,
+          quality: 'Good',
+        })),
+      },
+      recent,
+    });
+  });
 });
 
 server.listen(PORT, async () => {
