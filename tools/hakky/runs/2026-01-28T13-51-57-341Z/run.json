@@ -1,0 +1,21 @@
+{
+  "id": "2026-01-28T13-51-57-341Z",
+  "startedAt": "2026-01-28T13:51:57.342Z",
+  "endedAt": "2026-01-28T13:51:57.343Z",
+  "host": "Mights-MacBook-Pro.local",
+  "cwd": "/Users/might/clawd",
+  "concurrency": 1,
+  "dryRun": true,
+  "tasks": [
+    {
+      "name": "news-scan",
+      "status": "skipped",
+      "startedAt": null,
+      "endedAt": null,
+      "exitCode": null,
+      "signal": null,
+      "logPath": "/Users/might/clawd/tools/hakky/runs/2026-01-28T13-51-57-341Z/news-scan.log"
+    }
+  ],
+  "summary": "dry-run: would run news-scan"
+}

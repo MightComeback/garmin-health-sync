@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "source": "https://fathom.video/share/W4BYsHNzszjxivjxxmTHbzKzWCYAkPz-",
+  "text": "ALLEN AI Mastermind\nCustomer Success\nACTION ITEM\nYOUR QUESTIONS\nTHEIR QUESTIONS\n10 mins\nMoe Abbassi\nMoe's Fathom Notetaker\nIvan Kuznetsov",
+  "mediaUrl": "https://fathom.video/calls/458409078/video.m3u8",
+  "title": "Fathom",
+  "suggestedTitle": "Fathom",
+  "fetchError": null,
+  "artifactsDir": "/Users/might/clawd/tmp/fathom-e2e",
+  "transcriptPath": "/Users/might/clawd/tmp/fathom-e2e/transcript.txt",
+  "extractedJsonPath": "/Users/might/clawd/tmp/fathom-e2e/extracted.json",
+  "mediaPath": "/Users/might/clawd/tmp/fathom-e2e/video.mp4",
+  "mediaSegments": [
+    "/Users/might/clawd/tmp/fathom-e2e/segments/segment_000.mp4",
+    "/Users/might/clawd/tmp/fathom-e2e/segments/segment_001.mp4",
+    "/Users/might/clawd/tmp/fathom-e2e/segments/segment_002.mp4"
+  ],
+  "segmentSeconds": 300,
+  "mediaDownloadError": null
+}

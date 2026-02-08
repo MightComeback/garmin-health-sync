@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Releases · clawdbot/clawdbot",
+    "url": "https://github.com/clawdbot/clawdbot/releases",
+    "snippet": "Recent releases featuring plugins, channel plugins with HTTP hooks, cron one-shot schedules, voice call providers."
+  },
+  {
+    "title": "RELEASING",
+    "url": "https://docs.clawd.bot/reference/RELEASING",
+    "snippet": "GitHub release process, changelog updates, npm publish, appcast for macOS."
+  },
+  {
+    "title": "The Clawdbot Dumpster Fire",
+    "url": "https://acuvity.ai/the-clawdbot-dumpster-fire-72-hours-that-exposed-everything-wrong-with-ai-security/",
+    "snippet": "Security vulnerabilities, prompt injection, credential theft in Clawdbot."
+  }
+]

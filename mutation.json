@@ -1,0 +1,3 @@
+{
+  "query": "mutation { commentCreate(input: { issueId: \"34f059f0-32c9-4abc-998a-63034604cbcf\", body: \"Fixed packaging/id mismatch by standardizing plugin ID to 'molt-mascot'. https://github.com/MightComeback/molt-mascot/commit/ffd6d670a0929a2da7beedded7618d1b199da84d\" }) { success } }"
+}

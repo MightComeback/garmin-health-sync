@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fathom</title>
+    <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="u5zkYktV8XYPYpURNjE/Qc4lRYQ1U2fvnG27MUs0TO/MDsqijTk84tt62Aau4sbvno9dLQNsMpAX+IhOjLi7Fw==" />
+    <meta name="csp-nonce" content="b0vKdJuGAsXH4vZOxPmCaA==" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="robots" content="noindex">
+
+
+    <script nonce="b0vKdJuGAsXH4vZOxPmCaA==" type="text/javascript">
+  // Attempt to reload any dynamically added <style> tags provisioned by third-party scripts.
+  // Be sure this script is rendered at the very top of <head> and the script's domain is included
+  // in `allowedDomains`.
+
+  // NOTE: CSP errors will still be logged to the console. This script simply re-adds the styles
+  // with our app's nonce.
+
+  (function () {
+    const allowedDomains = [
+      'revenuehero.io',
+      'cdn-cookieyes.com',
+      'opps-widget.getwarmly.com',
+      'opps-api.getwarmly.com',
+      'assets.churnkey.co',
+    ];
+
+    document.addEventListener('securitypolicyviolation', (event) => {
+      if (!event.sourceFile) { return; }
+
+      const sourceURL = safeParseURL(event.sourceFile)
+      if (!sourceURL) { return; }
+
+      const sourceHostName = sourceURL.hostname;
+      if (!allowedDomains.some((domain) => sourceHostName.includes(domain))) {
+        return;
+      }
+
+      if (event.violatedDirective === 'style-src-elem') {
+        patchStyleTag(event);
+      } else if (event.violatedDirective === 'style-src-attr') {
+        patchInlineStyle(event)
+      }
+    });
+
+    function patchStyleTag(event) {
+      const cssContent = event.target.textContent;
+      if (!cssContent) { return; }
+
+      const securedNode = document.createElement('style');
+      securedNode.nonce = 'b0vKdJuGAsXH4vZOxPmCaA==';
+      securedNode.innerHTML = cssContent;
+      document.head.appendChild(securedNode);
+      if (event.target.remove) {
+        event.target.remove();
+      }
+    }
+
+    function patchInlineStyle(event) {
+      const styleContent = event.target.attributes && event.target.attributes.style.value;
+      if (!styleContent) { return; }
+
+      event.target.style = event.target.attributes.style.value
+    }
+
+    function safeParseURL(url) {
+      try {
+        return new URL(url)
+      } catch (error) {
+        return null
+      }
+    }
+  })()
+
+</script>
+
+
+    <script nonce="b0vKdJuGAsXH4vZOxPmCaA==" type="module" src="https://static.fathom.video/36890f74787f226e09a99b99ec196c05e29af55f/components/build/fathom.esm.js"></script>
+    <link rel="stylesheet" href="https://static.fathom.video/36890f74787f226e09a99b99ec196c05e29af55f/fonts/fonts.css">
+    <link rel="stylesheet" href="https://static.fathom.video/36890f74787f226e09a99b99ec196c05e29af55f/components/build/fathom.css">
+    <link rel="shortcut icon" href="https://static.fathom.video/36890f74787f226e09a99b99ec196c05e29af55f/favicon.png">
+
+
+      <script type="text/javascript" nonce="b0vKdJuGAsXH4vZOxPmCaA==">
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-M9N4SN4S');
+      </script>
+
+
+
+  </head>
+
+  <body class="tw fathom-custom-scrollbar">
+      <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9N4SN4S" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      </noscript>
+    <div id="app" data-page="{&quot;component&quot;:&quot;page-call-detail&quot;,&quot;props&quot;:{&quot;env&quot;:{&quot;RAILS_ENV&quot;:&quot;production&quot;,&quot;APP_VERSION&quot;:&quot;36890f74&quot;,&quot;HOST_NAME&quot;:&quot;fathom.video&quot;,&quot;PUSHER_KEY&quot;:&quot;38656DC7-F8F1-437D-9186-9E3BA013251D&quot;,&quot;PUSHER_AUTH_URL&quot;:&quot;/pusher/auth&quot;,&quot;PUSHER_CLUSTER&quot;:&quot;pushkit&quot;,&quot;PUSHER_HOST&quot;:&quot;pushkit.fathom.video&quot;,&quot;PUSHER_PATH&quot;:&quot;&quot;,&quot;PUSHER_OPTIONS&quot;:{&quot;cluster&quot;:&quot;pushkit&quot;,&quot;wsHost&quot;:&quot;pushkit.fathom.video&quot;,&quot;wsPath&quot;:&quot;&quot;,&quot;disableStats&quot;:true,&quot;disabledTransports&quot;:[&quot;sockjs&quot;]}},&quot;browserPlatform&quot;:{&quot;id&quot;:&quot;unknown_platform&quot;,&quot;version&quot;:&quot;0&quot;},&quot;head&quot;:{&quot;title&quot;:&quot;ALLEN AI Mastermind&quot;},&quot;layout&quot;:{&quot;component&quot;:&quot;app-layout&quot;,&quot;props&quot;:{&quot;flash&quot;:[],&quot;showHeader&quot;:true,&quot;showLoader&quot;:true,&quot;searchSummaryUrl&quot;:&quot;/calls/search/summary&quot;,&quot;isInvestor&quot;:false,&quot;hasTranscriptSearchWithAiSearch&quot;:false,&quot;aiSearchHasUnreadAlerts&quot;:false,&quot;banner&quot;:{&quot;id&quot;:-1,&quot;type&quot;:&quot;override&quot;,&quot;messageType&quot;:&quot;premium_plan_user_free_preview_ended&quot;,&quot;metadata&quot;:{&quot;dismissUrl&quot;:&quot;/user/dismiss_free_preview_banner?call_id=458409078\u0026event_type=dismissed_premium_plan_free_preview_ended_banner&quot;,&quot;learnMoreUrl&quot;:&quot;https://help.fathom.video/en/articles/5290881&quot;,&quot;upgradeUrl&quot;:&quot;/manage_subscription&quot;},&quot;isGamificationOnly&quot;:false},&quot;layoutPusherConfig&quot;:[{&quot;channel&quot;:&quot;user-1653920&quot;,&quot;event&quot;:&quot;gamification-updated&quot;},{&quot;channel&quot;:&quot;user-1653920&quot;,&quot;event&quot;:&quot;zoom-connection-updated&quot;}]}},&quot;currentUser&quot;:{&quot;id&quot;:1653920,&quot;first_name&quot;:&quot;Ivan&quot;,&quot;last_name&quot;:&quot;Kuznetsov&quot;,&quot;email&quot;:&quot;ivank@highperformancetrain.com&quot;,&quot;admin&quot;:false,&quot;avatar_url&quot;:&quot;https://lh3.googleusercontent.com/a/ACg8ocJlvbrSPT-br8qx13UIADnKAEWzhsnccMAcAB_7ik3SirN3dD0=s96-c&quot;,&quot;invite_url&quot;:&quot;https://fathom.video/invite/zayMXA&quot;,&quot;preferences&quot;:{&quot;updateUrl&quot;:&quot;/user/1653920/preferences&quot;,&quot;always_launch_live_panel&quot;:true,&quot;auto_end_tagging&quot;:true,&quot;auto_record_external&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:true},&quot;auto_record_impromptu&quot;:false,&quot;auto_record_impromptu_google_meet&quot;:false,&quot;auto_record_internal&quot;:true,&quot;auto_record_bot_join_at_scheduled_time&quot;:false,&quot;auto_share&quot;:&quot;recording_and_summary&quot;,&quot;default_share_access&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:&quot;universal&quot;},&quot;bot_name&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:null},&quot;request_recording_consent&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:false},&quot;show_monologue&quot;:true,&quot;use_bot_image&quot;:true,&quot;desktop_app_content_protection&quot;:false,&quot;desktop_app_upcoming_notifications&quot;:true,&quot;external_call_ai_template_id&quot;:23,&quot;auto_generate_action_items&quot;:true,&quot;bot_chat&quot;:&quot;enabled_for_everyone&quot;,&quot;prevent_data_training&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:true}},&quot;company&quot;:{&quot;domain&quot;:&quot;highperformancetrain.com&quot;,&quot;name&quot;:&quot;highperformancetrain.com&quot;,&quot;is_multi_user&quot;:true},&quot;game_state&quot;:{&quot;actions&quot;:{&quot;enable_auto_recording&quot;:{&quot;points&quot;:20,&quot;earned&quot;:true},&quot;enable_consent_emails&quot;:{&quot;points&quot;:10,&quot;earned&quot;:false},&quot;connect_salesforce&quot;:{&quot;points&quot;:20,&quot;earned&quot;:false},&quot;connect_hubspot&quot;:{&quot;points&quot;:20,&quot;earned&quot;:false},&quot;connect_closeio&quot;:{&quot;points&quot;:20,&quot;earned&quot;:false},&quot;connect_zoom&quot;:{&quot;points&quot;:5,&quot;earned&quot;:false},&quot;complete_test_call&quot;:{&quot;points&quot;:5,&quot;earned&quot;:false}},&quot;is_mayor&quot;:false},&quot;team&quot;:{&quot;tabUrl&quot;:&quot;/teams/highperformancetrain.com&quot;,&quot;alertsUrl&quot;:null,&quot;trackersUrl&quot;:null,&quot;coachingUrl&quot;:&quot;/coaching&quot;,&quot;dealsUrl&quot;:&quot;/teams/highperformancetrain.com/deals&quot;,&quot;hasScorecardsAccess&quot;:null,&quot;isActive&quot;:false,&quot;isMember&quot;:true,&quot;isViewer&quot;:true,&quot;isLegacyTrial&quot;:false,&quot;isAdmin&quot;:false,&quot;isTeamAdmin&quot;:false,&quot;checkoutUrl&quot;:&quot;https://fathom.video/team/checkout_settings&quot;,&quot;businessCheckoutSettings&quot;:null,&quot;shareFutureCalls&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;min_value&quot;:null,&quot;value&quot;:&quot;all_team_roles&quot;},&quot;preferences&quot;:{&quot;share_links_enabled&quot;:true,&quot;share_links_auto_expire_on_user_deactivation&quot;:false,&quot;share_links_require_sign_in&quot;:false},&quot;roles&quot;:[{&quot;id&quot;:207337,&quot;name&quot;:&quot;Customer Success&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207341,&quot;name&quot;:&quot;Engineering&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207338,&quot;name&quot;:&quot;Executive&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207340,&quot;name&quot;:&quot;Operations&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207342,&quot;name&quot;:&quot;Other&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207339,&quot;name&quot;:&quot;Product&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207336,&quot;name&quot;:&quot;Sales&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;}],&quot;teamRoleName&quot;:&quot;Customer Success&quot;},&quot;needs_first_login_override&quot;:false,&quot;requiredAdvancedAiPlan&quot;:&quot;user_premium&quot;,&quot;foldersUrl&quot;:&quot;/folders&quot;,&quot;premiumCheckoutUrl&quot;:&quot;/manage_subscription/checkout&quot;,&quot;beginTeamTrialUrl&quot;:&quot;/teams/highperformancetrain.com/onboarding/begin_team_trial&quot;,&quot;signedUpOnMobile&quot;:false,&quot;activeWithoutDesktopApp&quot;:false},&quot;currentVerifiedEmail&quot;:&quot;ivank@highperformancetrain.com&quot;,&quot;appDownloadUrl&quot;:&quot;https://fathom.video/download&quot;,&quot;customizeUrl&quot;:&quot;https://fathom.video/customize&quot;,&quot;bannerDismissUrl&quot;:&quot;/user/1653920/banners/dismiss&quot;,&quot;pointsUrl&quot;:&quot;/user/1653920/points&quot;,&quot;liveNotesUrl&quot;:&quot;/live/calls&quot;,&quot;playlistsUrl&quot;:&quot;/playlists&quot;,&quot;homeUrl&quot;:&quot;/home&quot;,&quot;logoutUrl&quot;:&quot;/users/sign_out&quot;,&quot;loginUrl&quot;:null,&quot;newRelicLogsUrl&quot;:&quot;/new_relic_logs&quot;,&quot;submitHelpRequestUrl&quot;:&quot;/front/submit_help_request&quot;,&quot;startTestCallUrl&quot;:&quot;https://fathom.video/zoom_app/onboarding/test_call&quot;,&quot;userTokenUrl&quot;:null,&quot;tutorialUrl&quot;:&quot;/onboarding/tutorial/index&quot;,&quot;scheduleCallUrl&quot;:null,&quot;publicApiDocsUrl&quot;:&quot;https://developers.fathom.ai&quot;,&quot;inElectron&quot;:false,&quot;electronVersion&quot;:null,&quot;inZapp&quot;:false,&quot;isMobile&quot;:false,&quot;adminConfig&quot;:null,&quot;pusherConfig&quot;:[{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;action-item-detection-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;ai-scorecard-evaluation-created&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;ai-scorecard-evaluation-completed&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;ai-scorecard-evaluation-failed&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;call-meeting-type-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;attached-hls-playlist&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;call-comments-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;crm-backfill-complete&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;crm-external-contact-sync-complete&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;crm-external-contact-sync-in-progress&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;crm-sync-complete&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;crm-sync-in-progress&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;follow-up-email-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;templated-note-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;default-templated-note-created&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;default-templated-note-failed-processing&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;mp4-created&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;note-mp4-created&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;note-share-url-created&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;notes-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;stars-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;state-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;team-view-visibility-changed&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;transcript-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;call-share-token-updated&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;call-share-token-audiences-updated&quot;},{&quot;channel&quot;:&quot;user-1653920&quot;,&quot;event&quot;:&quot;preferences-updated&quot;},{&quot;channel&quot;:&quot;user-1653920&quot;,&quot;event&quot;:&quot;salesforce-field-mapped&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;task-manager-sync-in-progress&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;task-manager-sync-complete&quot;},{&quot;channel&quot;:&quot;call-458409078&quot;,&quot;event&quot;:&quot;live-summary-updated&quot;}],&quot;call&quot;:{&quot;id&quot;:458409078,&quot;live_stream_id&quot;:98945169,&quot;startable&quot;:false,&quot;hostable&quot;:false,&quot;duration_minutes&quot;:60,&quot;topic&quot;:&quot;ALLEN AI Mastermind&quot;,&quot;title&quot;:&quot;ALLEN AI Mastermind&quot;,&quot;byline&quot;:&quot;tuviceleste06@gmail.com&quot;,&quot;started_at&quot;:&quot;2025-10-31T18:15:00.000000Z&quot;,&quot;state&quot;:&quot;finalized&quot;,&quot;state_gid&quot;:&quot;gid://fathom/Call::StateTransition/824450767&quot;,&quot;state_transitioned_at&quot;:1761935329350,&quot;permalink&quot;:&quot;https://fathom.video/calls/458409078&quot;,&quot;bookmarks&quot;:[{&quot;id&quot;:15424139,&quot;label&quot;:&quot;ACTION ITEM&quot;,&quot;hex_color&quot;:&quot;#EFEFEF&quot;,&quot;created_at&quot;:&quot;2025-06-28T14:01:45.828783Z&quot;,&quot;updated_at&quot;:&quot;2025-06-28T14:01:45.828785Z&quot;,&quot;sort_order&quot;:1,&quot;slack_channel&quot;:null,&quot;deleted&quot;:false,&quot;action_item&quot;:true,&quot;bookmark&quot;:false,&quot;question&quot;:false,&quot;screen_share&quot;:false,&quot;highlight&quot;:false,&quot;default_highlight&quot;:false,&quot;immutable&quot;:true,&quot;hidden&quot;:false},{&quot;id&quot;:15424142,&quot;label&quot;:&quot;YOUR QUESTIONS&quot;,&quot;hex_color&quot;:&quot;#999999&quot;,&quot;created_at&quot;:&quot;2025-06-28T14:01:45.828794Z&quot;,&quot;updated_at&quot;:&quot;2025-06-28T14:01:45.828794Z&quot;,&quot;sort_order&quot;:4,&quot;slack_channel&quot;:null,&quot;deleted&quot;:false,&quot;action_item&quot;:false,&quot;bookmark&quot;:false,&quot;question&quot;:true,&quot;screen_share&quot;:false,&quot;highlight&quot;:false,&quot;default_highlight&quot;:false,&quot;immutable&quot;:true,&quot;hidden&quot;:true},{&quot;id&quot;:15424143,&quot;label&quot;:&quot;THEIR QUESTIONS&quot;,&quot;hex_color&quot;:&quot;#999999&quot;,&quot;created_at&quot;:&quot;2025-06-28T14:01:45.828795Z&quot;,&quot;updated_at&quot;:&quot;2025-06-28T14:01:45.828796Z&quot;,&quot;sort_order&quot;:5,&quot;slack_channel&quot;:null,&quot;deleted&quot;:false,&quot;action_item&quot;:false,&quot;bookmark&quot;:false,&quot;question&quot;:true,&quot;screen_share&quot;:false,&quot;highlight&quot;:false,&quot;default_highlight&quot;:false,&quot;immutable&quot;:true,&quot;hidden&quot;:true}],&quot;star_rating&quot;:null,&quot;host&quot;:{&quot;id&quot;:1653920,&quot;first_name&quot;:&quot;Ivan&quot;,&quot;last_name&quot;:&quot;Kuznetsov&quot;,&quot;email&quot;:&quot;ivank@highperformancetrain.com&quot;,&quot;admin&quot;:false,&quot;avatar_url&quot;:&quot;https://lh3.googleusercontent.com/a/ACg8ocJlvbrSPT-br8qx13UIADnKAEWzhsnccMAcAB_7ik3SirN3dD0=s96-c&quot;,&quot;invite_url&quot;:&quot;https://fathom.video/invite/zayMXA&quot;,&quot;preferences&quot;:{&quot;updateUrl&quot;:&quot;/user/1653920/preferences&quot;,&quot;always_launch_live_panel&quot;:true,&quot;auto_end_tagging&quot;:true,&quot;auto_record_external&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:true},&quot;auto_record_impromptu&quot;:false,&quot;auto_record_impromptu_google_meet&quot;:false,&quot;auto_record_internal&quot;:true,&quot;auto_record_bot_join_at_scheduled_time&quot;:false,&quot;auto_share&quot;:&quot;recording_and_summary&quot;,&quot;default_share_access&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:&quot;universal&quot;},&quot;bot_name&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:null},&quot;request_recording_consent&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:false},&quot;show_monologue&quot;:true,&quot;use_bot_image&quot;:true,&quot;desktop_app_content_protection&quot;:false,&quot;desktop_app_upcoming_notifications&quot;:true,&quot;external_call_ai_template_id&quot;:23,&quot;auto_generate_action_items&quot;:true,&quot;bot_chat&quot;:&quot;enabled_for_everyone&quot;,&quot;prevent_data_training&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;value&quot;:true}},&quot;company&quot;:{&quot;domain&quot;:&quot;highperformancetrain.com&quot;,&quot;name&quot;:&quot;highperformancetrain.com&quot;,&quot;is_multi_user&quot;:true},&quot;game_state&quot;:{&quot;actions&quot;:{&quot;enable_auto_recording&quot;:{&quot;points&quot;:20,&quot;earned&quot;:true},&quot;enable_consent_emails&quot;:{&quot;points&quot;:10,&quot;earned&quot;:false},&quot;connect_salesforce&quot;:{&quot;points&quot;:20,&quot;earned&quot;:false},&quot;connect_hubspot&quot;:{&quot;points&quot;:20,&quot;earned&quot;:false},&quot;connect_closeio&quot;:{&quot;points&quot;:20,&quot;earned&quot;:false},&quot;connect_zoom&quot;:{&quot;points&quot;:5,&quot;earned&quot;:false},&quot;complete_test_call&quot;:{&quot;points&quot;:5,&quot;earned&quot;:false}},&quot;is_mayor&quot;:false},&quot;team&quot;:{&quot;tabUrl&quot;:&quot;/teams/highperformancetrain.com&quot;,&quot;alertsUrl&quot;:null,&quot;trackersUrl&quot;:null,&quot;coachingUrl&quot;:&quot;/coaching&quot;,&quot;dealsUrl&quot;:&quot;/teams/highperformancetrain.com/deals&quot;,&quot;hasScorecardsAccess&quot;:null,&quot;isActive&quot;:false,&quot;isMember&quot;:true,&quot;isViewer&quot;:true,&quot;isLegacyTrial&quot;:false,&quot;isAdmin&quot;:false,&quot;isTeamAdmin&quot;:false,&quot;checkoutUrl&quot;:&quot;https://fathom.video/team/checkout_settings&quot;,&quot;businessCheckoutSettings&quot;:null,&quot;shareFutureCalls&quot;:{&quot;overridden&quot;:false,&quot;overridden_by_email&quot;:null,&quot;min_value&quot;:null,&quot;value&quot;:&quot;all_team_roles&quot;},&quot;preferences&quot;:{&quot;share_links_enabled&quot;:true,&quot;share_links_auto_expire_on_user_deactivation&quot;:false,&quot;share_links_require_sign_in&quot;:false},&quot;roles&quot;:[{&quot;id&quot;:207337,&quot;name&quot;:&quot;Customer Success&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207341,&quot;name&quot;:&quot;Engineering&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207338,&quot;name&quot;:&quot;Executive&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207340,&quot;name&quot;:&quot;Operations&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207342,&quot;name&quot;:&quot;Other&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207339,&quot;name&quot;:&quot;Product&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;},{&quot;id&quot;:207336,&quot;name&quot;:&quot;Sales&quot;,&quot;calls_viewable_by&quot;:&quot;all_team_roles&quot;,&quot;auto_record_external_meeting&quot;:&quot;unset&quot;}],&quot;teamRoleName&quot;:&quot;Customer Success&quot;},&quot;needs_first_login_override&quot;:false,&quot;requiredAdvancedAiPlan&quot;:&quot;user_premium&quot;,&quot;foldersUrl&quot;:&quot;/folders&quot;,&quot;premiumCheckoutUrl&quot;:&quot;/manage_subscription/checkout&quot;,&quot;beginTeamTrialUrl&quot;:&quot;/teams/highperformancetrain.com/onboarding/begin_team_trial&quot;,&quot;signedUpOnMobile&quot;:false,&quot;activeWithoutDesktopApp&quot;:false},&quot;bot_initializing&quot;:false,&quot;bot_joined&quot;:true,&quot;bot_in_waiting_room&quot;:false,&quot;bot_wrong_password&quot;:false,&quot;bot_request_password&quot;:false,&quot;fathom_host_joined&quot;:true,&quot;first_participant_joined&quot;:true,&quot;recording&quot;:{&quot;created_at&quot;:&quot;2025-10-31T18:18:02.404989Z&quot;,&quot;started_at&quot;:&quot;2025-10-31T18:18:19.076830Z&quot;,&quot;duration_seconds&quot;:625.264333},&quot;internal&quot;:false,&quot;auto_record&quot;:true,&quot;hubspot_task_sync_enabled&quot;:false,&quot;processing_duration&quot;:null,&quot;recording_duration&quot;:&quot;10 mins&quot;,&quot;delete_url&quot;:&quot;/calls/458409078&quot;,&quot;zoom_url&quot;:&quot;https://us02web.zoom.us/j/2412819452&quot;,&quot;update_password_url&quot;:&quot;/live/panel/458409078/update_password&quot;,&quot;test_call&quot;:false,&quot;all_guests_consented&quot;:false,&quot;any_guests_requested_recording&quot;:false,&quot;any_guests_declined_consent&quot;:false,&quot;video_url&quot;:&quot;https://fathom.video/calls/458409078/video.m3u8&quot;,&quot;audio_url&quot;:&quot;https://fathom.video/audio/458409078&quot;,&quot;audio_only&quot;:false,&quot;player_type&quot;:&quot;video&quot;,&quot;thumbnail_url&quot;:&quot;https://storage.googleapis.com/fathom_video/un5bgijagb87z7s80pi7w2hxmydq?response-content-disposition=inline%3B%20filename%3D%22ecb0dea1-52da-46ae-9361-4638d0ad16f7.jpg%22%3B%20filename%2A%3DUTF-8%27%27ecb0dea1-52da-46ae-9361-4638d0ad16f7.jpg\u0026response-content-type=image%2Fjpeg\u0026X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Credential=GOOG1EL6XRA4K3BQTRU5FQAAGGNT7Y2HTBOACVAL3CWUN7HJJK6F57ZAOV2WY%2F20260128%2Fauto%2Fs3%2Faws4_request\u0026X-Amz-Date=20260128T205421Z\u0026X-Amz-Expires=21600\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Signature=ed80b2ffab8932781cd6ff289eeb9a237d9238ca616288e5f70e171a26c22ed8&quot;,&quot;highlight_count&quot;:0,&quot;action_item_count&quot;:1,&quot;is_impromptu&quot;:false,&quot;isTeamViewEligible&quot;:true,&quot;isTeamViewVisible&quot;:false,&quot;teamViewVisibility&quot;:&quot;invisible&quot;,&quot;teamVisibility&quot;:{&quot;override&quot;:&quot;invisible&quot;,&quot;teamRole&quot;:&quot;Customer Success&quot;,&quot;value&quot;:&quot;invisible&quot;,&quot;maxVisibilityTeamFolder&quot;:null,&quot;minVisibilityOverride&quot;:null},&quot;updateTeamViewVisibilityUrl&quot;:null,&quot;requestTeamPaidSeatUrl&quot;:null,&quot;updateStatusUrl&quot;:null,&quot;forciblyEndedReasonCode&quot;:null,&quot;universalShareable&quot;:{&quot;shareUrl&quot;:&quot;https://fathom.video/share/W4BYsHNzszjxivjxxmTHbzKzWCYAkPz-&quot;,&quot;access&quot;:&quot;universal&quot;,&quot;maxAccessFolderShareToken&quot;:null,&quot;actions&quot;:{&quot;createUrl&quot;:null,&quot;updateAccessUrl&quot;:&quot;/share_tokens/568866410&quot;}},&quot;shareRecordingWithAttendeesUrl&quot;:&quot;/calls/458409078/share_recording_with_attendees&quot;,&quot;sharedRecordingWithAttendees&quot;:true,&quot;unpause_url&quot;:&quot;/live/panel/458409078/unpause&quot;,&quot;panel_url&quot;:&quot;/live/panel/458409078&quot;,&quot;pause_url&quot;:&quot;/live/panel/458409078/pause&quot;,&quot;end_url&quot;:&quot;/live/panel/458409078/end&quot;,&quot;toggle_auto_record_url&quot;:&quot;/calls/458409078/toggle_auto_record&quot;,&quot;updateUrl&quot;:&quot;/calls/458409078&quot;,&quot;callPlaylistActions&quot;:{&quot;createUrl&quot;:null,&quot;indexUrl&quot;:null},&quot;folders&quot;:[],&quot;folderActions&quot;:{&quot;createUrl&quot;:null,&quot;addToFolderMenuUrl&quot;:null,&quot;indexUrl&quot;:null,&quot;removeUrl&quot;:null},&quot;demo_call_recording_started_at&quot;:null,&quot;meetingType&quot;:null,&quot;meetingTypeActions&quot;:{&quot;updateUrl&quot;:null,&quot;addMeetingTypeMenuUrl&quot;:null,&quot;editMeetingTypesUrl&quot;:null,&quot;deleteMeetingTypeUrl&quot;:null},&quot;contact&quot;:{&quot;first_name&quot;:null,&quot;name&quot;:&quot;tuviceleste06@gmail.com&quot;,&quot;email&quot;:&quot;tuviceleste06@gmail.com&quot;}},&quot;useNewHlsJs&quot;:false,&quot;callsUrl&quot;:&quot;/calls&quot;,&quot;noteUrl&quot;:&quot;/calls/458409078/notes&quot;,&quot;actionItemUrl&quot;:&quot;/calls/458409078/action_item&quot;,&quot;autoGeneratedActionItemsUrl&quot;:&quot;/calls/458409078/notes/auto_generated&quot;,&quot;recordingsUrl&quot;:&quot;/home&quot;,&quot;playlistActions&quot;:{&quot;createUrl&quot;:&quot;/playlists&quot;,&quot;indexUrl&quot;:&quot;/playlists/highlight_menu&quot;},&quot;access&quot;:&quot;host&quot;,&quot;duration&quot;:625.264333,&quot;showCrmSync&quot;:false,&quot;activateDownloadUrl&quot;:&quot;https://fathom.video/calls/458409078/activate_download&quot;,&quot;downloadVideoUrl&quot;:null,&quot;finishedGuidedWalkthroughUrl&quot;:null,&quot;guidedWalkthroughWistiaId&quot;:&quot;71rudxu5xi&quot;,&quot;currentTime&quot;:0.0,&quot;initialTab&quot;:&quot;summary&quot;,&quot;initialOpenModal&quot;:null,&quot;clipboardActionItemsUrl&quot;:&quot;https://fathom.video/calls/458409078/clipboard_action_items&quot;,&quot;copyTranscriptUrl&quot;:&quot;https://fathom.video/calls/458409078/copy_transcript&quot;,&quot;replaceCuesUrl&quot;:&quot;https://fathom.video/calls/458409078/replace_cues&quot;,&quot;trimRecordingUrl&quot;:&quot;https://fathom.video/calls/458409078/trim_recording&quot;,&quot;liveIntervals&quot;:[{&quot;end_time&quot;:625.264333,&quot;start_time&quot;:0.0}],&quot;updatedLiveIntervals&quot;:[{&quot;start_time&quot;:0.0,&quot;end_time&quot;:625.264333}],&quot;speakers&quot;:[{&quot;id&quot;:&quot;gid://fathom/Electron::Participant/580724921&quot;,&quot;name&quot;:&quot;Lilla&quot;,&quot;is_host&quot;:false},{&quot;id&quot;:&quot;gid://fathom/Electron::Participant/580724920&quot;,&quot;name&quot;:&quot;Moe Abbassi&quot;,&quot;is_host&quot;:false},{&quot;id&quot;:&quot;gid://fathom/Electron::Participant/580724923&quot;,&quot;name&quot;:&quot;Moe&#39;s Fathom Notetaker&quot;,&quot;is_host&quot;:false},{&quot;id&quot;:&quot;gid://fathom/User/1653920&quot;,&quot;name&quot;:&quot;Ivan Kuznetsov&quot;,&quot;is_host&quot;:true}],&quot;showMisattributedTranscriptCuesBanner&quot;:false,&quot;searchPlaylistsUrl&quot;:&quot;/playlists/search&quot;,&quot;actions&quot;:{&quot;premiumPlanUpgradeUrl&quot;:&quot;/manage_subscription&quot;},&quot;features&quot;:{&quot;ai_template_modifiers&quot;:true,&quot;ai_templated_note_translations&quot;:true},&quot;showAiModifierBanner&quot;:false,&quot;firstPostMonthlyFreeUsage&quot;:false},&quot;url&quot;:&quot;/calls/458409078&quot;,&quot;version&quot;:null}"></div>
+
+    <inertia-app></inertia-app>
+    <script type="text/javascript"
+  nonce="b0vKdJuGAsXH4vZOxPmCaA=="
+  src="https://browser.sentry-cdn.com/8.35.0/bundle.min.js"
+  integrity="sha384-j1K2/oFJn/QPiNs/Fk58NwXcaEbWzaUEF04vKMBnEprfbZ2hIQrAO0yc0XEfai1E"
+  crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="https://cdn.amplitude.com/script/b452f2efa3185160e730e4a064ec382d.js" nonce="b0vKdJuGAsXH4vZOxPmCaA=="></script>
+  <script type="text/javascript" nonce="b0vKdJuGAsXH4vZOxPmCaA==">
+    const params = []
+      params.push(1653920)
+
+    const config = {
+      fetchRemoteConfig: true,
+      minIdLength: 1,
+      autocapture: {
+        attribution: true,
+        pageViews: true,
+        sessions: true,
+        formInteractions: false,
+        fileDownloads: false,
+        elementInteractions: true,
+      },
+    }
+      config['serverUrl'] = 'https://amp.fathom.video/2/httpapi'
+
+    params.push(config)
+
+    let amplitudePromise = window.amplitude.init('b452f2efa3185160e730e4a064ec382d', ...params).promise;
+
+  </script>
+
+<script type="text/javascript" nonce="b0vKdJuGAsXH4vZOxPmCaA==">
+
+if ('Sentry' in window) {
+  Sentry.init({
+    dsn: 'https://d0dd4296ecdc4b6babc1cddf2e4cf15e@o439626.ingest.sentry.io/6502463',
+    release: '36890f74',
+    environment: 'production',
+    tracesSampleRate: 1,
+    beforeSend: function(event, hint) {
+      const error = hint.originalException;
+      if (error) {
+        if (error.name === 'EvalError' && error.message.includes('unsafe-eval'))
+        {
+          // skip this error
+          return null
+        }
+
+        let fingerprintMessage = error.message
+        if (
+          error.name === 'TypeError' &&
+          fingerprintMessage &&
+          fingerprintMessage.startsWith('Failed to fetch dynamically imported module')
+        ) {
+          // Simplify this message to not fingerprint a URL (that has hashes)
+          fingerprintMessage = 'Failed to fetch dynamically imported module'
+        }
+
+        // The stack trace based matching is abysmal, use a simpler one based on
+        // the error.  This does not include the filename or the like since
+        // those will be hashed names against the deployment commit SHA.
+        event.fingerprint = [error.name, fingerprintMessage]
+      }
+
+      return event;
+    },
+  });
+
+  Sentry.setUser({
+    email: "ivank@highperformancetrain.com",
+    id: "1653920"
+  })
+}
+</script>
+
+
+  <script
+    type="text/javascript"
+    nonce="b0vKdJuGAsXH4vZOxPmCaA=="
+    src='https://chat-assets.frontapp.com/v1/chat.bundle.js'></script>
+    <script type="text/javascript" nonce="b0vKdJuGAsXH4vZOxPmCaA==">
+    // Wait for FrontChat to be available before initializing
+    function initFrontChat(attempts = 0) {
+      if ('FrontChat' in window) {
+        if (!window.FathomFrontChat) {
+        window.FathomFrontChat = {
+            initiliazed: false,
+            callbacks: [],
+          }
+        }
+        window.FrontChat('init',
+          {
+            chatId: '90a2ab0f3638e9e0fd313f52c1f0875a',
+            useDefaultLauncher: false,
+            nonce: 'b0vKdJuGAsXH4vZOxPmCaA==',
+            onInitCompleted: () => {
+              window.FathomFrontChat.initialized = true;
+              window.FathomFrontChat.callbacks.forEach(callback => callback());
+            },
+          });
+      } else if (attempts < 10) {
+        // If FrontChat isn't available yet and we haven't exceeded max attempts, try again
+        setTimeout(() => initFrontChat(attempts + 1), 100);
+      }
+      // If we've tried 10 times and FrontChat still isn't available, give up silently
+    }
+
+    // Start the initialization process
+    initFrontChat();
+  </script>
+
+    <div hidden id='load-error' class='px-3 fixed inset-0 flex items-center justify-center backdrop-blur-2xl z-max'>
+      <div class='flex text-center items-center flex-col spacing-y-2 leading-xl rounded-lg bg-surface-base p-8 w-full max-w-md shadow-xl border border-surface-lower'>
+        <h1 class='font-extrabold text-lg'>Network Error</h1>
+        <p class='font-medium'>We detected an error while loading the requested content.</p>
+        <button class='bg-surface-high font-bold rounded px-3 py-2 mt-2'>Reload Page</button>
+        <a href='mailto:help@fathom.video?subject=Network error while using Fathom' class='mt-2 underline hover:no-underline text-sm font-bold text-surface-highest'>Contact Support</a>
+      </div>
+    </div>
+      <script type="text/javascript"
+        nonce="b0vKdJuGAsXH4vZOxPmCaA=="
+        src="/embed/prod_status_697fc2ad307fa64272da4b6cfb769eab846e28b020a8eb79dfda94247413710916bf9422ead45bccf1bdcc8d44fe6e8c.js"
+        integrity="sha384-aX/CrTB/pkJy2kts+3aeq4RuKLAgqOt539qUJHQTcQkWv5Qi6tRbzPG9zI1E/m6M"
+        crossorigin="anonymous">
+      </script>
+    <script type="text/javascript" nonce="b0vKdJuGAsXH4vZOxPmCaA==">
+      const loadErrorEl = document.getElementById('load-error')
+      loadErrorEl.querySelector('button').addEventListener('click', () => location.reload())
+      window.addEventListener("unhandledrejection", event => {
+        if(Sentry && event && event.reason && event.reason.toString().includes('isProxied')) {
+          Sentry.captureException(new Error('Error loading stencil file, isProxy error was raised'))
+          event.preventDefault()
+          loadErrorEl.hidden = false
+        }
+      }, true);
+    </script>
+      <script type="text/javascript" nonce="b0vKdJuGAsXH4vZOxPmCaA==" src="https://storage.saltfish.ai/player/player.js"></script>
+      <script type="text/javascript" nonce="b0vKdJuGAsXH4vZOxPmCaA==">
+        // Saltfish is loaded synchronously, so it should be present. However, if the script failed to load (ad blockers, etc), we should handle gracefully.
+        if (window.saltfish) {
+          window.saltfish.init('ZoYGSkLY0GjFmWhRQbBo')
+          if (window.onSaltfishInitialized) {
+            window.onSaltfishInitialized()
+          }
+        }
+      </script>
+  <script nonce="b0vKdJuGAsXH4vZOxPmCaA==">(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.nonce='b0vKdJuGAsXH4vZOxPmCaA==';d.innerHTML="window.__CF$cv$params={r:'9c53626f5e38349a',t:'MTc2OTYzMzY2MQ=='};var a=document.createElement('script');a.nonce='b0vKdJuGAsXH4vZOxPmCaA==';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

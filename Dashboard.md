@@ -1,0 +1,2 @@
+
+- [ ] Update Garmin sync cron 957a3e25-f2b9-4034-a5d1-49dbdbf07f8e payload: add "GARMIN_EMAIL=...; GARMIN_PASS=...; python3 Tools/garmin_auto_auth.py" before sync (Weekly Personal Report N/A recurring; sqlite activities=0)

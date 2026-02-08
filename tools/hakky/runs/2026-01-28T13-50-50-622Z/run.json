@@ -1,0 +1,39 @@
+{
+  "id": "2026-01-28T13-50-50-622Z",
+  "startedAt": "2026-01-28T13:50:50.623Z",
+  "endedAt": null,
+  "host": "Mights-MacBook-Pro.local",
+  "cwd": "/Users/might/clawd",
+  "concurrency": 2,
+  "dryRun": false,
+  "tasks": [
+    {
+      "name": "news-scan",
+      "status": "queued",
+      "startedAt": null,
+      "endedAt": null,
+      "exitCode": null,
+      "signal": null,
+      "logPath": "/Users/might/clawd/tools/hakky/runs/2026-01-28T13-50-50-622Z/news-scan.log"
+    },
+    {
+      "name": "obsidian-mine",
+      "status": "running",
+      "startedAt": "2026-01-28T13:50:50.624Z",
+      "endedAt": null,
+      "exitCode": null,
+      "signal": null,
+      "logPath": "/Users/might/clawd/tools/hakky/runs/2026-01-28T13-50-50-622Z/obsidian-mine.log"
+    },
+    {
+      "name": "codex-build",
+      "status": "queued",
+      "startedAt": null,
+      "endedAt": null,
+      "exitCode": null,
+      "signal": null,
+      "logPath": "/Users/might/clawd/tools/hakky/runs/2026-01-28T13-50-50-622Z/codex-build.log"
+    }
+  ],
+  "summary": null
+}

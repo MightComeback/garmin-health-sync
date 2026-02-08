@@ -1,0 +1,10 @@
+{
+  "lastPlanDate": "2026-01-31",
+  "lastPlanText": "Steer MIG-14 to 'video-extract' (was fathom2action). Implement Loom support (parity with Fathom). Fix autonomous loop scripts.",
+  "snoozeUntilMs": 1770086400000,
+  "misses": 0,
+  "lastDoneDate": null,
+  "lastDoneText": null,
+  "streakDays": 0,
+  "tz": "Europe/Kyiv"
+}

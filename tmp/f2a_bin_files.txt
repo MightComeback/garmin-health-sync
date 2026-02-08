@@ -1,0 +1,2 @@
+bin/fathom2action.js
+bin/fathom2action-extract.js

@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "source": "https://fathom.video/calls/458409078",
+  "text": "Fathom \n\n Network Error\n\n We detected an error while loading the requested content.\n\n Reload Page \n Contact Support",
+  "mediaUrl": "",
+  "title": "Fathom",
+  "suggestedTitle": "Fathom",
+  "fetchError": null,
+  "artifactsDir": "/Users/might/clawd/tmp/fathom-test",
+  "transcriptPath": "/Users/might/clawd/tmp/fathom-test/transcript.txt",
+  "extractedJsonPath": "/Users/might/clawd/tmp/fathom-test/extracted.json",
+  "mediaPath": null,
+  "mediaSegments": [],
+  "segmentSeconds": 300,
+  "mediaDownloadError": null
+}

@@ -1,0 +1,3 @@
+ M bin/fathom2action-extract.js
+ M src/extractor.js
+ M test/cli.test.js

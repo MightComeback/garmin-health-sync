@@ -1,0 +1,22 @@
+
+> fathom-extract@0.1.0 test
+> node --test
+
+✔ legacy wrapper prints version when --version is provided (60.28125ms)
+✔ legacy wrapper behaves like extractor (JSON output) (219.488917ms)
+✔ still writes stub artifacts when URL fetch fails and --out-dir is provided (84.795042ms)
+✔ supports auth-gated pages via FATHOM_COOKIE (182.642ms)
+✔ cookie file supports JSON exports (name/value pairs) (91.445959ms)
+✔ sets mediaDownloadError when download is enabled but mediaUrl is missing (83.546416ms)
+✔ extract tool resolves media URLs found in JSON (no extension) via content-type probe (93.839042ms)
+✔ prefers copy_transcript endpoint when present (better transcript extraction) (116.935833ms)
+✔ passes cookie + referer + user-agent when downloading media with ffmpeg (152.919583ms)
+✔ extract tool can download + split media into segments (local server) (160.197708ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1342.29625

@@ -1,0 +1,12 @@
+[
+  {
+    "title": "openclaw 2026.2.3",
+    "url": "https://github.com/openclaw/openclaw/releases",
+    "snippet": "Cron: add announce delivery mode for isolated jobs, default to announce, hard-migrate delivery modes, delete one-shot after success. Security: sandboxed media paths, gateway URL credential requirements."
+  },
+  {
+    "title": "The Clawdbot Dumpster Fire: Security Issues",
+    "url": "https://acuvity.ai/the-clawdbot-dumpster-fire-72-hours-that-exposed-everything-wrong-with-ai-security/",
+    "snippet": "Exposed servers, prompt injection for credential theft, plaintext storage, supply chain risks via unvetted skills."
+  }
+]

@@ -1,0 +1,14 @@
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_000.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_001.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_002.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_003.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_004.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_005.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_006.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_007.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_008.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_009.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_010.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_011.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_012.mp4
+/Users/might/clawd/tmp/fathom-20260128-233352/segments/segment_013.mp4

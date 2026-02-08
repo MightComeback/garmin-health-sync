@@ -1,0 +1,169 @@
++ mkdir .hakky-lock
++ cd /Users/might/clawd/repos/fathom2action
++ set -a
++ source /Users/might/clawd/.secrets/linear.env
+++ LINEAR_API_KEY=lin_api_dic8HAimRvEFqEU98uBYpJ4z1QxRN1fDEsqjpzFL
++ set +a
++ echo 'Starting run...'
+Starting run...
++ ls -la check_status.cjs
+-rw-r--r--@ 1 might  staff  538 Jan 31 05:51 check_status.cjs
+++ node scripts/linear.mjs dump MIG-14
++ RESPONSE='Title: Tool: Fathom link → actionable bug report brief (CLI + copy/paste)
+State: In Progress (started)
+
+## Outcome
+
+Turn a Fathom recording/link into an *engineering-actionable* brief so you don’t watch the whole video.
+
+## Inputs (MVP)
+
+* A Fathom share link (or transcript/notes pasted if link is not fetchable).
+
+## Output format (MVP)
+
+* 1-sentence summary of the bug
+* Repro steps (numbered)
+* Expected vs actual
+* Environment/context (who/where/when)
+* Exact timestamp(s) from the call (if available)
+* “Next actions” checklist
+* Optional: suggested Linear/GitHub issue title
+
+## Acceptance Criteria
+
+* CLI command: `fathom2action <url>` OR `fathom2action --stdin`
+* Produces deterministic markdown output (ready to paste into Linear/GitHub)
+* Handles “cannot fetch link” gracefully (asks for transcript paste)
+
+## Definition of Done
+
+* Repo exists on [github.com/MightComeback](<http://github.com/MightComeback>) with README + examples
+* First release tagged v0.1
+* You use it on 3 real Fathom links and it saves you time'
++ echo 'Linear Dump: Title: Tool: Fathom link → actionable bug report brief (CLI + copy/paste)
+State: In Progress (started)
+
+## Outcome
+
+Turn a Fathom recording/link into an *engineering-actionable* brief so you don’t watch the whole video.
+
+## Inputs (MVP)
+
+* A Fathom share link (or transcript/notes pasted if link is not fetchable).
+
+## Output format (MVP)
+
+* 1-sentence summary of the bug
+* Repro steps (numbered)
+* Expected vs actual
+* Environment/context (who/where/when)
+* Exact timestamp(s) from the call (if available)
+* “Next actions” checklist
+* Optional: suggested Linear/GitHub issue title
+
+## Acceptance Criteria
+
+* CLI command: `fathom2action <url>` OR `fathom2action --stdin`
+* Produces deterministic markdown output (ready to paste into Linear/GitHub)
+* Handles “cannot fetch link” gracefully (asks for transcript paste)
+
+## Definition of Done
+
+* Repo exists on [github.com/MightComeback](<http://github.com/MightComeback>) with README + examples
+* First release tagged v0.1
+* You use it on 3 real Fathom links and it saves you time'
+Linear Dump: Title: Tool: Fathom link → actionable bug report brief (CLI + copy/paste)
+State: In Progress (started)
+
+## Outcome
+
+Turn a Fathom recording/link into an *engineering-actionable* brief so you don’t watch the whole video.
+
+## Inputs (MVP)
+
+* A Fathom share link (or transcript/notes pasted if link is not fetchable).
+
+## Output format (MVP)
+
+* 1-sentence summary of the bug
+* Repro steps (numbered)
+* Expected vs actual
+* Environment/context (who/where/when)
+* Exact timestamp(s) from the call (if available)
+* “Next actions” checklist
+* Optional: suggested Linear/GitHub issue title
+
+## Acceptance Criteria
+
+* CLI command: `fathom2action <url>` OR `fathom2action --stdin`
+* Produces deterministic markdown output (ready to paste into Linear/GitHub)
+* Handles “cannot fetch link” gracefully (asks for transcript paste)
+
+## Definition of Done
+
+* Repo exists on [github.com/MightComeback](<http://github.com/MightComeback>) with README + examples
+* First release tagged v0.1
+* You use it on 3 real Fathom links and it saves you time
++ [[ Title: Tool: Fathom link → actionable bug report brief (CLI + copy/paste)
+State: In Progress (started)
+
+## Outcome
+
+Turn a Fathom recording/link into an *engineering-actionable* brief so you don’t watch the whole video.
+
+## Inputs (MVP)
+
+* A Fathom share link (or transcript/notes pasted if link is not fetchable).
+
+## Output format (MVP)
+
+* 1-sentence summary of the bug
+* Repro steps (numbered)
+* Expected vs actual
+* Environment/context (who/where/when)
+* Exact timestamp(s) from the call (if available)
+* “Next actions” checklist
+* Optional: suggested Linear/GitHub issue title
+
+## Acceptance Criteria
+
+* CLI command: `fathom2action <url>` OR `fathom2action --stdin`
+* Produces deterministic markdown output (ready to paste into Linear/GitHub)
+* Handles “cannot fetch link” gracefully (asks for transcript paste)
+
+## Definition of Done
+
+* Repo exists on [github.com/MightComeback](<http://github.com/MightComeback>) with README + examples
+* First release tagged v0.1
+* You use it on 3 real Fathom links and it saves you time == *\T\i\t\l\e\:* ]]
++ echo 'Proceeding with cleanup...'
+Proceeding with cleanup...
++ rm check_status.cjs check_status.js comment_linear.cjs check_issue_desc.cjs status.json status.txt .status issue_status.json issue_status_temp.json .last_issue_state.json test_all.log test_output.txt test_payment.log issue_info.txt issue_info.json issue_details.json
++ git add .
++ git commit -m 'chore: remove redundant root scripts and temp files'
+[main 74629ee] chore: remove redundant root scripts and temp files
+ 7 files changed, 35 insertions(+), 305 deletions(-)
+ delete mode 100644 .status
+ delete mode 100644 check_issue_desc.cjs
+ delete mode 100644 issue_info.txt
+ create mode 100644 run_cleanup.sh
+ delete mode 100644 status.txt
+ delete mode 100644 test_all.log
+ delete mode 100644 test_payment.log
++ echo Committed.
+Committed.
++ git push origin main
+To github.com:MightComeback/fathom-extract.git
+   c8b0648..74629ee  main -> main
+++ git rev-parse HEAD
++ SHA=74629eeb4c2469cf5c00be3eea4bf09a84a5947e
+++ gh api repos/MightComeback/fathom-extract/commits/74629eeb4c2469cf5c00be3eea4bf09a84a5947e --jq .html_url
++ URL=https://github.com/MightComeback/fathom-extract/commit/74629eeb4c2469cf5c00be3eea4bf09a84a5947e
++ echo 'Commit URL: https://github.com/MightComeback/fathom-extract/commit/74629eeb4c2469cf5c00be3eea4bf09a84a5947e'
+Commit URL: https://github.com/MightComeback/fathom-extract/commit/74629eeb4c2469cf5c00be3eea4bf09a84a5947e
++ node scripts/linear.mjs comment MIG-14 'Removed redundant root scripts and temp artifacts. Commit: https://github.com/MightComeback/fathom-extract/commit/74629eeb4c2469cf5c00be3eea4bf09a84a5947e'
+ok
++ rmdir .hakky-lock
++ echo Done.
+Done.

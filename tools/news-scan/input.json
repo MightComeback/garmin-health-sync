@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Clawdbot releases featuring plugins, HTTP hooks, cron schedules",
+    "url": "https://github.com/clawdbot/clawdbot/releases",
+    "snippet": "Recent versions (2026.1.24, 2026.1.14-1) with plugins, channel plugins (gateway HTTP hooks), Zalo plugin, cron one-shot schedules."
+  },
+  {
+    "title": "OpenClaw v2026.2.1 release",
+    "url": "https://github.com/openclaw/openclaw/releases/tag/v2026.2.1",
+    "snippet": "Adds plugin hook wiring (before_tool_call), enforces TLS 1.3 minimum, security hardenings."
+  },
+  {
+    "title": "Clawdbot security analysis",
+    "url": "https://acuvity.ai/the-clawdbot-dumpster-fire-72-hours-that-exposed-everything-wrong-with-ai-security/",
+    "snippet": "Security vulnerabilities including prompt injection, credential theft."
+  },
+  {
+    "title": "OpenClaw complete guide 2026",
+    "url": "https://www.nxcode.io/resources/news/openclaw-complete-guide-2026",
+    "snippet": "Recent releases with Ollama discovery, Venice guide, web search tools, browser control, plugin system, cron."
+  }
+]

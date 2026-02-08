@@ -1,0 +1,12 @@
+[
+  {
+    "text": "Clawdbot introduced first-class plugin support in release 2026.1.24, including a loader and CLI management commands.",
+    "url": "https://github.com/clawdbot/clawdbot/releases",
+    "source": "github"
+  },
+  {
+    "text": "Security researchers identify misconfigured Clawdbot instances exposing credentials and susceptible to prompt injection.",
+    "url": "https://acuvity.ai/the-clawdbot-dumpster-fire-72-hours-that-exposed-everything-wrong-with-ai-security/",
+    "source": "web"
+  }
+]
