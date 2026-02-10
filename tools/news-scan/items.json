@@ -1,8 +1,7 @@
 [
-  {"title": "OpenClaw Releases", "url": "https://github.com/openclaw/openclaw/releases", "snippet": "Releases are available at github.com/openclaw/openclaw/releases, with the organization renamed from clawdbot."},
-  {"title": "Moltbot Releases", "url": "https://github.com/moltbot/moltbot/releases", "snippet": "Recent Clawdbot/Moltbot versions highlight plugin, cron, hooks-like features (e.g., threading, approvals), and tools akin to skills: v2026.1.24 (Jan 25): LINE plugin..."},
-  {"title": "Clawdbot RELEASING", "url": "https://docs.clawd.bot/reference/RELEASING", "snippet": "Clawdbot's official RELEASING guide outlines steps for creating GitHub releases (e.g., tag vX.Y.Z, attach npm tarballs, app zips), updating CHANGELOG.md..."},
-  {"title": "awesome-moltbot-skills", "url": "https://github.com/VoltAgent/awesome-moltbot-skills", "snippet": "Community lists exist (e.g., awesome-moltbot-skills), with future plans for an extension marketplace."},
-  {"title": "Clawdbot Repo", "url": "https://github.com/clawdbot", "snippet": "github.com/clawdbot"},
-  {"title": "timolins/clawdbot", "url": "https://github.com/timolins/clawdbot", "snippet": "forks like github.com/timolins/clawdbot."}
+  {
+    "title": "openclaw 2026.2.9 release",
+    "url": "https://github.com/openclaw/openclaw/releases/tag/2026.2.9",
+    "snippet": "Release 2026.2.9: iOS alpha node app; pairing/phone control plugins; Grok provider; cron reliability fixes; hooks fix; Telegram hardening." 
+  }
 ]

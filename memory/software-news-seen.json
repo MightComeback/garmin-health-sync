@@ -1,5 +1,5 @@
 {
-  "updatedAtMs": 1770447719725,
+  "updatedAtMs": 1770696149915,
   "urls": [
     "https://ine.com/blog/january-2026-critical-cve-round-up",
     "https://www.csoonline.com/article/4123500/critical-forticloud-sso-zero%E2%80%91day-forces-emergency-service-disablement-at-fortinet.html",
@@ -30,6 +30,9 @@
     "https://github.com/openclaw/openclaw/releases/tag/2026.2.3",
     "https://docs.clawd.bot/reference/RELEASING",
     "https://x.com/search?q=site%3Ax.com%20(clawdbot%20OR%20moltbot%20OR%20clawd)%20(release%20OR%20roadmap%20OR%20hooks%20OR%20cron%20OR%20plugin%20OR%20skill)&src=typed_query",
-    "https://github.com/VoltAgent/awesome-moltbot-skills"
+    "https://github.com/VoltAgent/awesome-moltbot-skills",
+    "https://github.com/openclaw/openclaw/releases/tag/2026.2.9",
+    "https://github.com/openclaw/openclaw/issues/5103",
+    "https://github.com/openclaw/openclaw/releases/tag/v2026.2.9"
   ]
 }
